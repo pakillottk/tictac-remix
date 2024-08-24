@@ -7,9 +7,11 @@ export class TicTacEventsMother {
     eventId: faker.string.uuid(),
     name: faker.commerce.product(),
     description: faker.lorem.paragraph(),
-    eventLocation: faker.location.direction(),
+    eventLocation: faker.location.streetAddress(),
     eventDate: faker.date.recent(),
     scanning: faker.datatype.boolean(),
+    ownerId: faker.string.uuid(),
+    ownerName: faker.company.name(),
     eventImage: faker.image.url(),
   });
 
@@ -19,9 +21,11 @@ export class TicTacEventsMother {
         eventId: faker.string.uuid(),
         name: faker.commerce.product(),
         description: faker.lorem.paragraph(),
-        eventLocation: faker.location.direction(),
+        eventLocation: faker.location.streetAddress(),
         eventDate: faker.date.recent(),
         scanning: faker.datatype.boolean(),
+        ownerId: faker.string.uuid(),
+        ownerName: faker.company.name(),
         eventImage: faker.image.url(),
       })
     );

@@ -1,6 +1,10 @@
+import 'reflect-metadata';
+import { injectable } from 'inversify';
+
 import { TicTacEvent } from '../../../domain/tictac-event';
 import { TicTacEventsRepository } from '../../../domain/tictac-events-repository';
 
+@injectable()
 export class TicTacEventsRepositoryInMemory extends TicTacEventsRepository {
   constructor(private readonly events: TicTacEvent[] = []) {
     super();

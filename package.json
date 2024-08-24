@@ -26,7 +26,8 @@
     "ts-factory": "^2.0.1",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "inversify": "^6.0.2"
   },
   "workspaces": [
     "packages/backoffice",

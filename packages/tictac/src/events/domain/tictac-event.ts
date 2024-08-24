@@ -8,6 +8,8 @@ export interface TicTacEventPrimitives {
   eventLocation: string;
   eventDate: Date;
   scanning: boolean;
+  ownerId: string;
+  ownerName: string;
   eventImage?: string | null;
 }
 
@@ -19,6 +21,8 @@ export class TicTacEvent extends AggregateRoot {
     public readonly eventLocation: string,
     public readonly eventDate: Date,
     public readonly scanning: boolean,
+    public readonly ownerId: string,
+    public readonly ownerName: string,
     public readonly eventImage: Option<string>
   ) {
     super();
@@ -32,6 +36,8 @@ export class TicTacEvent extends AggregateRoot {
       primitives.eventLocation,
       primitives.eventDate,
       primitives.scanning,
+      primitives.ownerId,
+      primitives.ownerName,
       fromNullable(primitives.eventImage)
     );
   }
@@ -44,6 +50,8 @@ export class TicTacEvent extends AggregateRoot {
       eventLocation: this.eventLocation,
       eventDate: this.eventDate,
       scanning: this.scanning,
+      ownerId: this.ownerId,
+      ownerName: this.ownerName,
       eventImage: toNullable(this.eventImage),
     };
   }
