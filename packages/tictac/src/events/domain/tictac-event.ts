@@ -1,5 +1,6 @@
 import { AggregateRoot } from '@tictac/kernel/src/domain/aggregate-root';
 import { Option, fromNullable, toNullable } from 'fp-ts/Option';
+import { TicTacEventCreatedEvent } from '../../kernel/domain/events/tictac-event-created-event';
 
 export interface TicTacEventPrimitives {
   eventId: string;
@@ -26,6 +27,34 @@ export class TicTacEvent extends AggregateRoot {
     public readonly eventImage: Option<string>
   ) {
     super();
+  }
+
+  static create(
+    eventId: string,
+    name: string,
+    description: string,
+    eventLocation: string,
+    eventDate: Date,
+    scanning: boolean,
+    ownerId: string,
+    ownerName: string,
+    eventImage: Option<string>
+  ): TicTacEvent {
+    const event = new TicTacEvent(
+      eventId,
+      name,
+      description,
+      eventLocation,
+      eventDate,
+      scanning,
+      ownerId,
+      ownerName,
+      eventImage
+    );
+
+    event.record(new TicTacEventCreatedEvent(event.toPrimitives(), eventId));
+
+    return event;
   }
 
   static fromPrimitives(primitives: TicTacEventPrimitives): TicTacEvent {
