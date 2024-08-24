@@ -10,5 +10,8 @@
       }
     },
     "references": [
+      {
+        "path": "../kernel"
+      }
     ]
   }

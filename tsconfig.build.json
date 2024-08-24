@@ -1,8 +1,14 @@
 {
-    "files": [],
-    "references": [
-        {
-          "path": "packages/kernel"
-        }
-    ]
-  }
+  "files": [],
+  "references": [
+    {
+      "path": "packages/backoffice"
+    },
+    {
+      "path": "packages/kernel"
+    },
+    {
+      "path": "packages/tictac"
+    }
+  ]
+}
