@@ -7,7 +7,7 @@ export abstract class TicketTypesRepository {
 
   abstract searchByEvent(eventId: EventId): Promise<TicketType[]>;
 
-  abstract search(ticketTypeId: TicketTypeId): Promise<TicketType | null>;
+  abstract findById(ticketTypeId: TicketTypeId): Promise<TicketType | null>;
 
   abstract searchAll(): Promise<TicketType[]>;
 }

@@ -13,7 +13,7 @@ export interface TicTacEventCreatedEventAttributes {
 }
 
 export class TicTacEventCreatedEvent extends DomainEvent {
-  static EVENT_NAME: string = 'tictac.tictac.events.tictacevent.created';
+  static EVENT_NAME: string = 'tictac.tictac.events.tictacevent.created.1';
 
   static fromPrimitives(params: {
     aggregateId: string;

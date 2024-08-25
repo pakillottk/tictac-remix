@@ -16,7 +16,7 @@ import { z } from 'zod';
 import { useFetcher } from '@remix-run/react';
 import { useRef } from 'react';
 
-export const CreateFormDtoSchema = z.object({
+export const CreateEventFormDtoSchema = z.object({
   name: z.string().min(2, {
     message: 'El nombre del evento debe tener al menos 2 caracteres.',
   }),
@@ -27,16 +27,20 @@ export const CreateFormDtoSchema = z.object({
   image: z.string(),
   scanning: z.boolean().default(false),
 });
-export type CreateFormDto = z.infer<typeof CreateFormDtoSchema>;
+export type CreateEventFormDto = z.infer<typeof CreateEventFormDtoSchema>;
 
-const formSchema = CreateFormDtoSchema;
+const formSchema = CreateEventFormDtoSchema;
 
-export function CreateEventForm({ onFormSubmitted }: { onFormSubmitted?: (values?: CreateFormDto | null) => void }) {
+export function CreateEventForm({
+  onFormSubmitted,
+}: {
+  onFormSubmitted?: (values?: CreateEventFormDto | null) => void;
+}) {
   const fetcher = useFetcher();
 
   const formRef = useRef(null);
 
-  const form = useForm<CreateFormDto>({
+  const form = useForm<CreateEventFormDto>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
@@ -47,7 +51,7 @@ export function CreateEventForm({ onFormSubmitted }: { onFormSubmitted?: (values
     },
   });
 
-  async function onSubmit(values: CreateFormDto) {
+  async function onSubmit(values: CreateEventFormDto) {
     try {
       fetcher.submit(formRef.current, {
         method: 'POST',

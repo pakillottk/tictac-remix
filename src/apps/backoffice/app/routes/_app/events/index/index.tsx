@@ -6,7 +6,7 @@ import { TicTacEventsAllSearcher } from '@tictac/tictac/src/events/application/s
 import CreateEventDialog from '~/components/forms/events/create-event-dialog';
 import { ActionFunctionArgs } from '@remix-run/node';
 import { TicTacEventCreator } from '@tictac/tictac/src/events/application/create/tictac-event-creator';
-import { CreateFormDtoSchema } from '~/components/forms/events/create-event-form';
+import { CreateEventFormDtoSchema } from '~/components/forms/events/create-event-form';
 
 export async function loader() {
   const searcher = container.get<TicTacEventsAllSearcher>(TicTacEventsAllSearcher);
@@ -49,7 +49,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   assert(!!eventCreator);
 
   const body = await request.formData();
-  const payload = CreateFormDtoSchema.parse(Object.fromEntries(body.entries()));
+  const payload = CreateEventFormDtoSchema.parse(Object.fromEntries(body.entries()));
 
   await eventCreator.execute({
     ...payload,

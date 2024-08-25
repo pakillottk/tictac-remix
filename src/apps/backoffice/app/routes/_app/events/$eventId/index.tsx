@@ -1,24 +1,20 @@
-import { CalendarIcon, ClockIcon, MapPinIcon, TicketIcon, UsersIcon } from 'lucide-react';
+import { json, LoaderFunctionArgs } from '@remix-run/node';
+
+import { CalendarIcon, ClockIcon, FilePenIcon, MapPinIcon, TrashIcon, UsersIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
-// import {
-//   AlertDialog,
-//   AlertDialogAction,
-//   AlertDialogCancel,
-//   AlertDialogContent,
-//   AlertDialogDescription,
-//   AlertDialogFooter,
-//   AlertDialogHeader,
-//   AlertDialogTitle,
-//   AlertDialogTrigger,
-// } from '@/components/ui/alert-dialog';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+
+import { TictacEventFinder } from '@tictac/tictac/src/events/application/find/tictac-event-finder';
+import { MetaFunction, useLoaderData } from '@remix-run/react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+
+import CreateTicketTypeDialog from '~/components/forms/ticket-types/create-ticket-type-dialog';
 
 import { container } from '~/container';
 import assert from 'assert';
-import { json, LoaderFunctionArgs } from '@remix-run/node';
-import { TictacEventFinder } from '@tictac/tictac/src/events/application/find/tictac-event-finder';
-import { useLoaderData } from '@remix-run/react';
 import { TicketTypesByEventFinder } from '@tictac/tictac/src/ticket-types/application/find-by-event/ticket-types-by-event-finder';
+import EditTicketTypeDialog from '~/components/forms/ticket-types/edit-ticket-type-dialog';
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const eventFinder = container.get<TictacEventFinder>(TictacEventFinder);
@@ -32,37 +28,16 @@ export async function loader({ params }: LoaderFunctionArgs) {
   return json({ event, ticketTypes });
 }
 
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  return [{ title: 'TIC/TAC Remix - ' + data?.event.name }];
+};
+
 export default function TicTacEventPage() {
   const { event: eventJson, ticketTypes } = useLoaderData<typeof loader>();
   const event = { ...eventJson, eventDate: new Date(eventJson.eventDate) };
 
   return (
     <>
-      {/* <div className="flex justify-end items-center mb-6">
-        <div className="space-x-2">
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive">
-                <TrashIcon className="mr-2 h-4 w-4" />
-                Borrar evento
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>¿Seguro que desea eliminar el evento?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Esta acción no se puede deshacer. Todos los datos relacionados con el evento se perderán.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                <AlertDialogAction>Eliminar</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-      </div> */}
-
       <div className="grid md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
           <img
@@ -78,19 +53,47 @@ export default function TicTacEventPage() {
             <span className="text-sm text-muted-foreground">Organizado por {event.ownerName}</span>
           </div>
 
-          <h2 className="text-2xl font-semibold mb-4">Tipos de entrada</h2>
-          <div className="space-y-4">
-            {ticketTypes.map((ticket, index) => (
-              <Card key={index}>
-                <CardContent className="flex justify-between items-center p-4">
-                  <div className="flex items-center">
-                    <TicketIcon className="mr-2 h-5 w-5" />
-                    <span>{ticket.name}</span>
-                  </div>
-                  <span className="font-semibold">${ticket.price}</span>
-                </CardContent>
-              </Card>
-            ))}
+          <div>
+            <Card>
+              <CardHeader>
+                <CardTitle>Tipos de Entrada</CardTitle>
+                <CardDescription>Gestionar los tipos de entrada.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Tipo</TableHead>
+                      <TableHead>Precio</TableHead>
+                      <TableHead>Acciones</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {ticketTypes.map((ticket) => (
+                      <TableRow key={ticket.ticketTypeId}>
+                        <TableCell className="font-medium">{ticket.name}</TableCell>
+                        <TableCell>${ticket.price.toFixed(2)}</TableCell>
+                        <TableCell className="flex items-center gap-2">
+                          <EditTicketTypeDialog ticketType={ticket}>
+                            <Button variant="outline" size="icon">
+                              <FilePenIcon className="h-4 w-4" />
+                              <span className="sr-only">Edit</span>
+                            </Button>
+                          </EditTicketTypeDialog>
+                          <Button variant="outline" size="icon" className="text-red-500">
+                            <TrashIcon className="h-4 w-4" />
+                            <span className="sr-only">Delete</span>
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+              <CardFooter className="justify-end">
+                <CreateTicketTypeDialog />
+              </CardFooter>
+            </Card>
           </div>
         </div>
 
@@ -101,11 +104,11 @@ export default function TicTacEventPage() {
               <div className="space-y-4">
                 <div className="flex items-center">
                   <CalendarIcon className="mr-2 h-5 w-5" />
-                  <span>{event.eventDate.toLocaleDateString()}</span>
+                  <span>{event.eventDate.toDateString()}</span>
                 </div>
                 <div className="flex items-center">
                   <ClockIcon className="mr-2 h-5 w-5" />
-                  <span>{event.eventDate.toTimeString()}</span>
+                  <span>{event.eventDate.getHours()}</span>
                 </div>
                 <div className="flex items-center">
                   <MapPinIcon className="mr-2 h-5 w-5" />

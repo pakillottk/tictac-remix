@@ -1,5 +1,3 @@
-import 'reflect-metadata';
-
 import { Container } from 'inversify';
 
 import { EventBus } from '@tictac/kernel/src/domain/event-bus';
@@ -16,6 +14,8 @@ import { TicketTypesRepository } from '@tictac/tictac/src/ticket-types/domain/ti
 import { TicketTypesRepositoryInMemory } from '@tictac/tictac/src/ticket-types/infrastructure/persistence/in-memory/ticket-types-repository-in-memory';
 import { TicketTypesByEventFinder } from '@tictac/tictac/src/ticket-types/application/find-by-event/ticket-types-by-event-finder';
 import { TicketTypesMother } from '@tictac/tictac/src/ticket-types/infrastructure/testing/ticket-types-mother';
+import { TicketTypeCreator } from '@tictac/tictac/src/ticket-types/application/create/ticket-type-creator';
+import { TicketTypeEditor } from '@tictac/tictac/src/ticket-types/application/edit/ticket-type-editor';
 
 // TODO(pgm): These are for development purposes...
 const events = Array.from({ length: 2 }, () => TicTacEventsMother.random());
@@ -38,5 +38,7 @@ container.bind<TicTacEventCreator>(TicTacEventCreator).to(TicTacEventCreator);
 container.bind(TicketTypesRepository).toConstantValue(new TicketTypesRepositoryInMemory(ticketTypes));
 
 container.bind(TicketTypesByEventFinder).to(TicketTypesByEventFinder);
+container.bind(TicketTypeCreator).to(TicketTypeCreator);
+container.bind(TicketTypeEditor).to(TicketTypeEditor);
 
 export { container };
