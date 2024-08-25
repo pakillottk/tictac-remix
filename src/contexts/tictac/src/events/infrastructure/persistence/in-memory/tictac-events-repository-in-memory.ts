@@ -2,6 +2,7 @@ import { injectable } from 'inversify';
 
 import { TicTacEvent } from '../../../domain/tictac-event';
 import { TicTacEventsRepository } from '../../../domain/tictac-events-repository';
+import { EventId } from '@tictac/tictac/src/kernel/domain/event-id';
 
 @injectable()
 export class TicTacEventsRepositoryInMemory extends TicTacEventsRepository {
@@ -13,8 +14,8 @@ export class TicTacEventsRepositoryInMemory extends TicTacEventsRepository {
     this.events.push(event);
   }
 
-  async find(eventId: string) {
-    return this.events.find((event) => event.eventId === eventId) || null;
+  async find(eventId: EventId) {
+    return this.events.find((event) => event.eventId.value === eventId.value) || null;
   }
 
   async findAll() {

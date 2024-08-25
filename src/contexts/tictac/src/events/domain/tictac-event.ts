@@ -1,6 +1,7 @@
 import { AggregateRoot } from '@tictac/kernel/src/domain/aggregate-root';
 import { Option, fromNullable, toNullable } from 'fp-ts/Option';
 import { TicTacEventCreatedEvent } from '../../kernel/domain/events/tictac-event-created-event';
+import { EventId } from '../../kernel/domain/event-id';
 
 export interface TicTacEventPrimitives {
   eventId: string;
@@ -16,7 +17,7 @@ export interface TicTacEventPrimitives {
 
 export class TicTacEvent extends AggregateRoot {
   constructor(
-    public readonly eventId: string,
+    public readonly eventId: EventId,
     public readonly name: string,
     public readonly description: string,
     public readonly eventLocation: string,
@@ -30,7 +31,7 @@ export class TicTacEvent extends AggregateRoot {
   }
 
   static create(
-    eventId: string,
+    eventId: EventId,
     name: string,
     description: string,
     eventLocation: string,
@@ -52,14 +53,14 @@ export class TicTacEvent extends AggregateRoot {
       eventImage
     );
 
-    event.record(new TicTacEventCreatedEvent(event.toPrimitives(), eventId));
+    event.record(new TicTacEventCreatedEvent(event.toPrimitives(), eventId.value));
 
     return event;
   }
 
   static fromPrimitives(primitives: TicTacEventPrimitives): TicTacEvent {
     return new TicTacEvent(
-      primitives.eventId,
+      new EventId(primitives.eventId),
       primitives.name,
       primitives.description,
       primitives.eventLocation,
@@ -73,7 +74,7 @@ export class TicTacEvent extends AggregateRoot {
 
   toPrimitives(): TicTacEventPrimitives {
     return {
-      eventId: this.eventId,
+      eventId: this.eventId.value,
       name: this.name,
       description: this.description,
       eventLocation: this.eventLocation,

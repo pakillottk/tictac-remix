@@ -12,7 +12,7 @@ describe('TictacEventFinder', () => {
     const tictacEventFinder = new TictacEventFinder(tictacEventsRepository);
 
     // Act
-    const result = await tictacEventFinder.execute(event.eventId);
+    const result = await tictacEventFinder.execute(event.eventId.value);
 
     // Assert
     expect(result).toEqual(event.toPrimitives());
@@ -20,7 +20,7 @@ describe('TictacEventFinder', () => {
 
   it('should throw an error if the event is not found', async () => {
     // Arrange
-    const eventId = 'event-id';
+    const eventId = '00000000-0000-0000-0000-000000000000';
     const tictacEventsRepository = new TicTacEventsRepositoryInMemory([]);
     const tictacEventFinder = new TictacEventFinder(tictacEventsRepository);
 
