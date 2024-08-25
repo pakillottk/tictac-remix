@@ -16,6 +16,7 @@ import { TicketTypesByEventFinder } from '@tictac/tictac/src/ticket-types/applic
 import { TicketTypesMother } from '@tictac/tictac/src/ticket-types/infrastructure/testing/ticket-types-mother';
 import { TicketTypeCreator } from '@tictac/tictac/src/ticket-types/application/create/ticket-type-creator';
 import { TicketTypeEditor } from '@tictac/tictac/src/ticket-types/application/edit/ticket-type-editor';
+import { TicketTypeDeleter } from '@tictac/tictac/src/ticket-types/application/delete/ticket-type-deleter';
 
 // TODO(pgm): These are for development purposes...
 const events = Array.from({ length: 2 }, () => TicTacEventsMother.random());
@@ -40,5 +41,6 @@ container.bind(TicketTypesRepository).toConstantValue(new TicketTypesRepositoryI
 container.bind(TicketTypesByEventFinder).to(TicketTypesByEventFinder);
 container.bind(TicketTypeCreator).to(TicketTypeCreator);
 container.bind(TicketTypeEditor).to(TicketTypeEditor);
+container.bind(TicketTypeDeleter).to(TicketTypeDeleter);
 
 export { container };

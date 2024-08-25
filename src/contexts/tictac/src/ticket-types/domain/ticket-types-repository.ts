@@ -10,4 +10,6 @@ export abstract class TicketTypesRepository {
   abstract findById(ticketTypeId: TicketTypeId): Promise<TicketType | null>;
 
   abstract searchAll(): Promise<TicketType[]>;
+
+  abstract delete(ticketTypeId: TicketTypeId): Promise<void>;
 }

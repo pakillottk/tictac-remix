@@ -3,6 +3,7 @@ import { TicketTypeId } from '../../kernel/domain/ticket-type-id';
 import { EventId } from '../../kernel/domain/event-id';
 import { TicketTypeCreatedEvent } from '../../kernel/domain/events/ticket-type-created-event';
 import { TicketTypeUpdatedEvent } from '../../kernel/domain/events/ticket-type-edited-event';
+import { TicketTypeDeletedEvent } from '../../kernel/domain/events/ticket-type-deleted-event';
 
 export interface TicketTypePrimitives {
   ticketTypeId: string;
@@ -70,6 +71,10 @@ export class TicketType extends AggregateRoot {
     );
 
     return editedTicketType;
+  }
+
+  public delete(): void {
+    this.record(new TicketTypeDeletedEvent(this.toPrimitives(), this.ticketTypeId.value));
   }
 
   toPrimitives() {

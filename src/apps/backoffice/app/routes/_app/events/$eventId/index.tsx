@@ -15,6 +15,7 @@ import { container } from '~/container';
 import assert from 'assert';
 import { TicketTypesByEventFinder } from '@tictac/tictac/src/ticket-types/application/find-by-event/ticket-types-by-event-finder';
 import EditTicketTypeDialog from '~/components/forms/ticket-types/edit-ticket-type-dialog';
+import { DeleteTicketTypeDialog } from '~/components/forms/ticket-types/delete-ticket-type-dialog';
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const eventFinder = container.get<TictacEventFinder>(TictacEventFinder);
@@ -77,13 +78,15 @@ export default function TicTacEventPage() {
                           <EditTicketTypeDialog ticketType={ticket}>
                             <Button variant="outline" size="icon">
                               <FilePenIcon className="h-4 w-4" />
-                              <span className="sr-only">Edit</span>
+                              <span className="sr-only">Editar</span>
                             </Button>
                           </EditTicketTypeDialog>
-                          <Button variant="outline" size="icon" className="text-red-500">
-                            <TrashIcon className="h-4 w-4" />
-                            <span className="sr-only">Delete</span>
-                          </Button>
+                          <DeleteTicketTypeDialog ticketType={ticket}>
+                            <Button variant="outline" size="icon" className="text-red-500">
+                              <TrashIcon className="h-4 w-4" />
+                              <span className="sr-only">Eliminar</span>
+                            </Button>
+                          </DeleteTicketTypeDialog>
                         </TableCell>
                       </TableRow>
                     ))}

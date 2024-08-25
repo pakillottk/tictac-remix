@@ -26,4 +26,13 @@ export class TicketTypesRepositoryInMemory extends TicketTypesRepository {
   async searchAll(): Promise<TicketType[]> {
     return this.ticketTypes;
   }
+
+  async delete(ticketTypeId: TicketTypeId): Promise<void> {
+    const index = this.ticketTypes.findIndex((t) => t.ticketTypeId.value === ticketTypeId.value);
+    if (index !== -1) {
+      this.ticketTypes.splice(index, 1);
+    } else {
+      throw new Error('Ticket type not found');
+    }
+  }
 }
