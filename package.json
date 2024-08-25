@@ -26,15 +26,15 @@
     "ts-factory": "^2.0.1",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.4",
-    "inversify": "^6.0.2"
+    "typescript": "^5.5.4"
   },
   "workspaces": [
-    "packages/backoffice",
-    "packages/kernel",
-    "packages/tictac"
+    "src/apps/backoffice",
+    "src/contexts/kernel",
+    "src/contexts/tictac"
   ],
   "dependencies": {
-    "fp-ts": "^2.16.9"
+    "fp-ts": "^2.16.9",
+    "inversify": "^6.0.2"
   }
 }

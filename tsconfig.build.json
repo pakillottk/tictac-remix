@@ -2,13 +2,13 @@
   "files": [],
   "references": [
     {
-      "path": "packages/backoffice"
+      "path": "src/apps/backoffice"
     },
     {
-      "path": "packages/kernel"
+      "path": "src/contexts/kernel"
     },
     {
-      "path": "packages/tictac"
+      "path": "src/contexts/tictac"
     }
   ]
 }

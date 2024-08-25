@@ -1,0 +1,18 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "types": ["jest", "reflect-metadata"],
+    "paths": {
+      "@tictac/*": ["./contexts/*"]
+    }
+  },
+  "references": [
+    {
+      "path": "../kernel"
+    }
+  ]
+}
