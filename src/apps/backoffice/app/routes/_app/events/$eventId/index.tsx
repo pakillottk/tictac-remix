@@ -18,23 +18,23 @@ import assert from 'assert';
 import { json, LoaderFunctionArgs } from '@remix-run/node';
 import { TictacEventFinder } from '@tictac/tictac/src/events/application/find/tictac-event-finder';
 import { useLoaderData } from '@remix-run/react';
+import { TicketTypesByEventFinder } from '@tictac/tictac/src/ticket-types/application/find-by-event/ticket-types-by-event-finder';
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const finder = container.get<TictacEventFinder>(TictacEventFinder);
-  assert(!!finder);
-  const event = await finder.execute(params.eventId ?? '');
-  return json({ event });
+  const eventFinder = container.get<TictacEventFinder>(TictacEventFinder);
+  assert(!!eventFinder);
+
+  const ticketTypesFinder = container.get<TicketTypesByEventFinder>(TicketTypesByEventFinder);
+  assert(!!ticketTypesFinder);
+
+  const event = await eventFinder.execute(params.eventId ?? '');
+  const ticketTypes = await ticketTypesFinder.execute(params.eventId ?? '');
+  return json({ event, ticketTypes });
 }
 
 export default function TicTacEventPage() {
-  const { event: eventJson } = useLoaderData<typeof loader>();
+  const { event: eventJson, ticketTypes } = useLoaderData<typeof loader>();
   const event = { ...eventJson, eventDate: new Date(eventJson.eventDate) };
-
-  const ticketTypes = [
-    { name: 'General Admission', price: 75 },
-    { name: 'VIP', price: 150 },
-    { name: 'Backstage Pass', price: 250 },
-  ];
 
   return (
     <>
