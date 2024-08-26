@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils';
 import { z } from 'zod';
 import { useFetcher } from '@remix-run/react';
 import { useRef } from 'react';
+import { MapInput } from '@/components/ui/map-input';
 
 export const CreateEventFormDtoSchema = z.object({
   name: z.string().min(2, {
@@ -122,7 +123,8 @@ export function CreateEventForm({
             <FormItem>
               <FormLabel>Localidad</FormLabel>
               <FormControl>
-                <Input placeholder="C/Calle, Numero - Ciudad (Provincia)" {...field} />
+                {/* <Input placeholder="C/Calle, Numero - Ciudad (Provincia)" {...field} /> */}
+                <MapInput placeholder="C/Calle, Numero - Ciudad (Provincia)" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

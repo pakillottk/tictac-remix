@@ -17,7 +17,7 @@ export function EventCard({ event }: { event: TicTacEventPrimitives }) {
       <CardContent>
         <div className="flex items-center mb-2">
           <Calendar className="mr-2 h-4 w-4 opacity-70" />
-          <span className="text-sm">{event.eventDate.toLocaleDateString()}</span>
+          <span className="text-sm">{event.eventDate.toDateString()}</span>
         </div>
         <div className="flex items-center">
           <MapPin className="mr-2 h-4 w-4 opacity-70" />

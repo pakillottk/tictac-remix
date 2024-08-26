@@ -76,13 +76,13 @@ export default function TicTacEventPage() {
                         <TableCell>${ticket.price.toFixed(2)}</TableCell>
                         <TableCell className="flex items-center gap-2">
                           <EditTicketTypeDialog ticketType={ticket}>
-                            <Button variant="outline" size="icon">
+                            <Button disabled={event.scanning} variant="outline" size="icon">
                               <FilePenIcon className="h-4 w-4" />
                               <span className="sr-only">Editar</span>
                             </Button>
                           </EditTicketTypeDialog>
                           <DeleteTicketTypeDialog ticketType={ticket}>
-                            <Button variant="outline" size="icon" className="text-red-500">
+                            <Button disabled={event.scanning} variant="outline" size="icon" className="text-red-500">
                               <TrashIcon className="h-4 w-4" />
                               <span className="sr-only">Eliminar</span>
                             </Button>
@@ -116,10 +116,6 @@ export default function TicTacEventPage() {
                 <div className="flex items-center">
                   <MapPinIcon className="mr-2 h-5 w-5" />
                   <span>{event.eventLocation}</span>
-                </div>
-                <div className="flex items-center">
-                  <UsersIcon className="mr-2 h-5 w-5" />
-                  <span>Aforo: 5000 personas</span>
                 </div>
               </div>
             </CardContent>
