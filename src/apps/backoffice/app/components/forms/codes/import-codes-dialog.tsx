@@ -60,6 +60,14 @@ export function ImportCodesDialog({ children }: { children: React.ReactNode }) {
       });
   }, [file, delimiter]);
 
+  useEffect(() => {
+    if (!open) {
+      setFile(null);
+      setError(null);
+      setParsedData([]);
+    }
+  }, [open]);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -108,6 +116,7 @@ export function ImportCodesDialog({ children }: { children: React.ReactNode }) {
             <Form
               method="POST"
               action="codes"
+              navigate={false}
               onSubmit={() => {
                 setOpen(false);
               }}

@@ -1,5 +1,5 @@
 import { json, LoaderFunctionArgs } from '@remix-run/node';
-import { Link, MetaFunction, useLoaderData, useSearchParams } from '@remix-run/react';
+import { Link, MetaFunction, useLoaderData, useLocation, useSearchParams } from '@remix-run/react';
 
 import { Badge } from '@/components/ui/badge';
 
@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ImportCodesDialog } from '~/components/forms/codes/import-codes-dialog';
 import { PlusIcon } from 'lucide-react';
+import { url } from 'inspector';
 
 const PAGE_LIMIT = 25;
 
@@ -133,7 +134,13 @@ export default function TicTacEventPage() {
                     <li>
                       <Button disabled={paginatedCodes.offset <= 0}>
                         <Link
-                          to={`/events/${event.eventId}?codesPage=${paginatedCodes.offset / PAGE_LIMIT - 1}`}
+                          to={{
+                            pathname: '.',
+                            search: new URLSearchParams({
+                              ...Object.fromEntries(searchParams.entries()),
+                              codesPage: (paginatedCodes.offset / PAGE_LIMIT - 1).toString(),
+                            }).toString(),
+                          }}
                           preventScrollReset
                         >
                           Anterior
@@ -143,7 +150,13 @@ export default function TicTacEventPage() {
                     <li>
                       <Button disabled={paginatedCodes.offset + paginatedCodes.count >= paginatedCodes.total}>
                         <Link
-                          to={`/events/${event.eventId}?codesPage=${paginatedCodes.offset / PAGE_LIMIT + 1}`}
+                          to={{
+                            pathname: '.',
+                            search: new URLSearchParams({
+                              ...Object.fromEntries(searchParams.entries()),
+                              codesPage: (paginatedCodes.offset / PAGE_LIMIT + 1).toString(),
+                            }).toString(),
+                          }}
                           preventScrollReset
                         >
                           Siguiente
