@@ -3,7 +3,7 @@ import { PreventFlashOnWrongTheme, ThemeProvider, useTheme } from 'remix-themes'
 
 import { themeSessionResolver } from './sessions.server';
 
-import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
 import { LoaderFunctionArgs } from '@remix-run/node';
 
 import './tailwind.css';

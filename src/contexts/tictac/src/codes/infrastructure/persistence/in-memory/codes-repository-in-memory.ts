@@ -19,6 +19,21 @@ export class CodesRepositoryInMemory extends CodesRepository {
     }
   }
 
+  async bulkCreate(codes: Code[]): Promise<void> {
+    this.codes.push(...codes);
+  }
+
+  async bulkUpdate(codes: Code[]): Promise<void> {
+    codes.forEach((code) => {
+      const idx = this.codes.findIndex((c) => c.code.value === code.code.value);
+      if (idx === -1) {
+        this.codes.push(code);
+      } else {
+        this.codes[idx] = code;
+      }
+    });
+  }
+
   async findByCode(code: TicketCode) {
     return fromNullable(this.codes.find((c) => c.code.value === code.value));
   }

@@ -39,33 +39,19 @@ export default function TicketTypesTable({
                     {ticket.scannedAmmount} / {ticket.ammount}
                   </TableCell>
                   <TableCell className="flex items-center gap-2">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <EditTicketTypeDialog ticketType={ticket}>
-                            <Button disabled={readOnly} variant="outline" size="icon">
-                              <FilePenIcon className="h-4 w-4" />
-                              <span className="sr-only">Editar</span>
-                            </Button>
-                          </EditTicketTypeDialog>
-                        </TooltipTrigger>
-                        <TooltipContent>Editar</TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                    <EditTicketTypeDialog ticketType={ticket}>
+                      <Button disabled={readOnly} variant="outline" size="icon">
+                        <FilePenIcon className="h-4 w-4" />
+                        <span className="sr-only">Editar</span>
+                      </Button>
+                    </EditTicketTypeDialog>
 
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <DeleteTicketTypeDialog ticketType={ticket}>
-                            <Button disabled={readOnly} variant="outline" size="icon" className="text-red-500">
-                              <TrashIcon className="h-4 w-4" />
-                              <span className="sr-only">Eliminar</span>
-                            </Button>
-                          </DeleteTicketTypeDialog>
-                        </TooltipTrigger>
-                        <TooltipContent>Eliminar</TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                    <DeleteTicketTypeDialog ticketType={ticket}>
+                      <Button disabled={readOnly} variant="outline" size="icon" className="text-red-500">
+                        <TrashIcon className="h-4 w-4" />
+                        <span className="sr-only">Eliminar</span>
+                      </Button>
+                    </DeleteTicketTypeDialog>
                   </TableCell>
                 </TableRow>
               ))}

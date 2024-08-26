@@ -2,7 +2,7 @@ import { AggregateRoot } from '@tictac/kernel/src/domain/aggregate-root';
 import { TicketTypeId } from '../../kernel/domain/ticket-type-id';
 import { EventId } from '../../kernel/domain/event-id';
 import { TicketTypeCreatedEvent } from '../../kernel/domain/events/ticket-type-created-event';
-import { TicketTypeUpdatedEvent } from '../../kernel/domain/events/ticket-type-edited-event';
+import { TicketTypeEditedEvent } from '../../kernel/domain/events/ticket-type-edited-event';
 import { TicketTypeDeletedEvent } from '../../kernel/domain/events/ticket-type-deleted-event';
 
 export interface TicketTypePrimitives {
@@ -46,7 +46,7 @@ export class TicketType extends AggregateRoot {
     const editedTicketType = new TicketType(this.ticketTypeId, name, this.ammount, this.scannedAmmount, this.eventId);
 
     this.record(
-      new TicketTypeUpdatedEvent(
+      new TicketTypeEditedEvent(
         {
           ticketTypeId: this.ticketTypeId.value,
           oldValues: { name: this.name },
@@ -58,6 +58,19 @@ export class TicketType extends AggregateRoot {
     );
 
     return editedTicketType;
+  }
+
+  public incrementAmmount(): TicketType {
+    // TODO: domain events
+    const incrementedTicketType = new TicketType(
+      this.ticketTypeId,
+      this.name,
+      this.ammount + 1,
+      this.scannedAmmount,
+      this.eventId
+    );
+
+    return incrementedTicketType;
   }
 
   public delete(): void {

@@ -5,6 +5,8 @@ import { TicketCode } from './ticket-code';
 
 export abstract class CodesRepository {
   abstract save(code: Code): Promise<void>;
+  abstract bulkCreate(codes: Code[]): Promise<void>;
+  abstract bulkUpdate(codes: Code[]): Promise<void>;
 
   abstract findByCode(code: TicketCode): Promise<Option<Code>>;
 

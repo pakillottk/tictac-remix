@@ -27,6 +27,7 @@ export default function EditTicketTypeDialog({
           <DialogTitle>Editar tipo de entrada</DialogTitle>
           <DialogDescription>Modifica los datos del tipo de entrada.</DialogDescription>
         </DialogHeader>
+
         <EditTicketTypeForm
           ticketType={ticketType}
           onFormSubmitted={(values) => {

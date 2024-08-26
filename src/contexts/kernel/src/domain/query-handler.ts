@@ -1,7 +1,10 @@
+import { injectable } from 'inversify';
+
 import { Query } from './query';
 import { Response } from './response';
 
-export interface QueryHandler<Q extends Query, R extends Response> {
-  subscribedTo(): Query;
-  handle(query: Q): Promise<R>;
+@injectable()
+export abstract class QueryHandler<Q extends Query, R extends Response> {
+  abstract subscribedTo(): Query;
+  abstract handle(query: Q): Promise<R>;
 }

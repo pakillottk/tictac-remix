@@ -1,6 +1,6 @@
 import { DomainEvent } from '@tictac/kernel/src/domain/domain-event';
 
-export interface TicketTypeUpdatedEventAttributes {
+export interface TicketTypeEditedEventAttributes {
   ticketTypeId: string;
   oldValues: {
     name: string;
@@ -11,29 +11,29 @@ export interface TicketTypeUpdatedEventAttributes {
   eventId: string;
 }
 
-export class TicketTypeUpdatedEvent extends DomainEvent {
-  static EVENT_NAME: string = 'tictac.tictac.events.tickettypes.updated.1';
+export class TicketTypeEditedEvent extends DomainEvent {
+  static EVENT_NAME: string = 'tictac.tictac.events.tickettypes.edited.1';
 
   static fromPrimitives(params: {
     aggregateId: string;
     eventId: string;
     occurredOn: Date;
-    attributes: TicketTypeUpdatedEventAttributes;
-  }): TicketTypeUpdatedEvent {
+    attributes: TicketTypeEditedEventAttributes;
+  }): TicketTypeEditedEvent {
     const { aggregateId, eventId, occurredOn, attributes } = params;
-    return new TicketTypeUpdatedEvent(attributes, aggregateId, eventId, occurredOn);
+    return new TicketTypeEditedEvent(attributes, aggregateId, eventId, occurredOn);
   }
 
   constructor(
-    public readonly attributes: TicketTypeUpdatedEventAttributes,
+    public readonly attributes: TicketTypeEditedEventAttributes,
     aggregateId: string,
     eventId?: string,
     occurredOn?: Date
   ) {
-    super({ eventName: TicketTypeUpdatedEvent.EVENT_NAME, aggregateId, eventId, occurredOn });
+    super({ eventName: TicketTypeEditedEvent.EVENT_NAME, aggregateId, eventId, occurredOn });
   }
 
-  toPrimitives(): TicketTypeUpdatedEventAttributes {
+  toPrimitives(): TicketTypeEditedEventAttributes {
     return this.attributes;
   }
 }

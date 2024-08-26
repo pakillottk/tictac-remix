@@ -1,7 +1,17 @@
 import { Container } from 'inversify';
 
+import { QueryHandler } from '@tictac/kernel/src/domain/query-handler';
+import { Query } from '@tictac/kernel/src/domain/query';
+import { Response } from '@tictac/kernel/src/domain/response';
+import { QueryBus } from '@tictac/kernel/src/domain/query-bus';
+import { QueryHandlers } from '@tictac/kernel/src/infrastructure/query-bus/query-handlers';
+import { InMemoryQueryBus } from '@tictac/kernel/src/infrastructure/query-bus/in-memory-query-bus';
+
 import { EventBus } from '@tictac/kernel/src/domain/event-bus';
 import { InMemoryAsyncEventBus } from '@tictac/kernel/src/infrastructure/event-bus/in-memory/in-memory-async-event-bus';
+
+import { DomainEventSubscriber } from '@tictac/kernel/src/domain/domain-event-subscriber';
+import { DomainEvent } from '@tictac/kernel/src/domain/domain-event';
 
 import { TicTacEventsRepository } from '@tictac/tictac/src/events/domain/tictac-events-repository';
 import { TicTacEventsRepositoryInMemory } from '@tictac/tictac/src/events/infrastructure/persistence/in-memory/tictac-events-repository-in-memory';
@@ -9,20 +19,24 @@ import { TicTacEventsAllSearcher } from '@tictac/tictac/src/events/application/s
 import { TicTacEventsMother } from '@tictac/tictac/src/events/infrastructure/testing/tictac-events-mother';
 import { TictacEventFinder } from '@tictac/tictac/src/events/application/find/tictac-event-finder';
 import { TicTacEventCreator } from '@tictac/tictac/src/events/application/create/tictac-event-creator';
+import { EventBasicInfoQueryHandler } from '@tictac/tictac/src/events/application/query-handlers/event-basic-info-query-handler';
 
+import { TicketTypesMother } from '@tictac/tictac/src/ticket-types/infrastructure/testing/ticket-types-mother';
+import { OnCodeCreatedUpdateTicketTypeAmmount } from '@tictac/tictac/src/ticket-types/application/event-handlers/on-code-created-update-ticket-type-ammount';
 import { TicketTypesRepository } from '@tictac/tictac/src/ticket-types/domain/ticket-types-repository';
 import { TicketTypesRepositoryInMemory } from '@tictac/tictac/src/ticket-types/infrastructure/persistence/in-memory/ticket-types-repository-in-memory';
 import { TicketTypesByEventFinder } from '@tictac/tictac/src/ticket-types/application/find-by-event/ticket-types-by-event-finder';
-import { TicketTypesMother } from '@tictac/tictac/src/ticket-types/infrastructure/testing/ticket-types-mother';
 import { TicketTypeCreator } from '@tictac/tictac/src/ticket-types/application/create/ticket-type-creator';
 import { TicketTypeEditor } from '@tictac/tictac/src/ticket-types/application/edit/ticket-type-editor';
 import { TicketTypeDeleter } from '@tictac/tictac/src/ticket-types/application/delete/ticket-type-deleter';
 
 import { CodesMother } from '@tictac/tictac/src/codes/infrastructure/testing/codes-mother';
+import { OnTicketTypeEditedUpdateCodesTicketTypes } from '@tictac/tictac/src/codes/application/event-handlers/on-ticket-type-edited-update-codes-ticket-types';
 import { CodesRepository } from '@tictac/tictac/src/codes/domain/codes-repository';
 import { CodesRepositoryInMemory } from '@tictac/tictac/src/codes/infrastructure/persistence/in-memory/codes-repository-in-memory';
-import { CodesByTicketTypesIdsFinder } from '@tictac/tictac/src/codes/application/find-by-ticket-types-ids/codes-by-ticket-types-ids-finder';
 import { CodeTicketType } from '@tictac/tictac/src/codes/domain/code-ticket-type';
+import { CodesByTicketTypesIdsFinder } from '@tictac/tictac/src/codes/application/find-by-ticket-types-ids/codes-by-ticket-types-ids-finder';
+import { BulkCodeCreator } from '@tictac/tictac/src/codes/application/bulk-create/bulk-code-creator';
 
 // TODO(pgm): These are for development purposes...
 const events = Array.from({ length: 2 }, () => TicTacEventsMother.random());
@@ -37,7 +51,25 @@ const codes = ticketTypes.flatMap((ticketType) => {
 
 const container = new Container();
 
-container.bind<EventBus>(EventBus).toConstantValue(new InMemoryAsyncEventBus());
+// Queries
+container.bind<QueryHandler<Query, Response>>(QueryHandler).to(EventBasicInfoQueryHandler);
+
+container.bind<QueryBus>(QueryBus).toDynamicValue((ctx) => {
+  const handlers = ctx.container.getAll<QueryHandler<Query, Response>>(QueryHandler);
+  const queryBus = new InMemoryQueryBus(new QueryHandlers(handlers));
+  return queryBus;
+});
+
+// DomainEvents
+container.bind<DomainEventSubscriber<DomainEvent>>(DomainEventSubscriber).to(OnTicketTypeEditedUpdateCodesTicketTypes);
+container.bind<DomainEventSubscriber<DomainEvent>>(DomainEventSubscriber).to(OnCodeCreatedUpdateTicketTypeAmmount);
+
+container.bind<EventBus>(EventBus).toDynamicValue((ctx) => {
+  const eventBus = new InMemoryAsyncEventBus();
+  const subscribers = ctx.container.getAll<DomainEventSubscriber<DomainEvent>>(DomainEventSubscriber);
+  eventBus.addSubscribers(subscribers);
+  return eventBus;
+});
 
 // TicTacEvents
 container.bind(TicTacEventsRepository).toConstantValue(new TicTacEventsRepositoryInMemory(events));
@@ -58,5 +90,6 @@ container.bind(TicketTypeDeleter).to(TicketTypeDeleter);
 container.bind(CodesRepository).toConstantValue(new CodesRepositoryInMemory(codes));
 
 container.bind(CodesByTicketTypesIdsFinder).to(CodesByTicketTypesIdsFinder);
+container.bind(BulkCodeCreator).to(BulkCodeCreator);
 
 export { container };

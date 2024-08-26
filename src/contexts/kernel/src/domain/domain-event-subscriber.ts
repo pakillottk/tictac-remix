@@ -1,6 +1,8 @@
+import { injectable } from 'inversify';
 import { DomainEvent, DomainEventClass } from './domain-event';
 
-export interface DomainEventSubscriber<T extends DomainEvent> {
-  subscribedTo(): Array<DomainEventClass>;
-  on(domainEvent: T): Promise<void>;
+@injectable()
+export abstract class DomainEventSubscriber<T extends DomainEvent> {
+  abstract subscribedTo(): Array<DomainEventClass>;
+  abstract on(domainEvent: T): Promise<void>;
 }

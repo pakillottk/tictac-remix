@@ -15,6 +15,8 @@ import { container } from '~/container';
 import assert from 'assert';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ImportCodesDialog } from '~/components/forms/codes/import-codes-dialog';
+import { PlusIcon } from 'lucide-react';
 
 const PAGE_LIMIT = 25;
 
@@ -87,27 +89,36 @@ export default function TicTacEventPage() {
               codes={codes}
               readOnly={event.scanning}
               header={
-                <Select
-                  defaultValue="*"
-                  onValueChange={(value) => {
-                    setSearchParams(
-                      { ...searchParams, codesPage: '0', codeTicketType: value },
-                      { preventScrollReset: true }
-                    );
-                  }}
-                >
-                  <SelectTrigger className="w-40">
-                    <SelectValue placeholder="Filtrar por tipo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="*">Todos</SelectItem>
-                    {ticketTypes.map((ticketType) => (
-                      <SelectItem key={ticketType.ticketTypeId} value={ticketType.ticketTypeId}>
-                        {ticketType.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="flex flex-wrap items-center justify-between">
+                  <Select
+                    defaultValue="*"
+                    onValueChange={(value) => {
+                      setSearchParams(
+                        { ...searchParams, codesPage: '0', codeTicketType: value },
+                        { preventScrollReset: true }
+                      );
+                    }}
+                  >
+                    <SelectTrigger className="w-40">
+                      <SelectValue placeholder="Filtrar por tipo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="*">Todos</SelectItem>
+                      {ticketTypes.map((ticketType) => (
+                        <SelectItem key={ticketType.ticketTypeId} value={ticketType.ticketTypeId}>
+                          {ticketType.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <ImportCodesDialog>
+                    <Button disabled={event.scanning}>
+                      <PlusIcon className="mr-2 h-4 w-4" />
+                      Importar códigos
+                    </Button>
+                  </ImportCodesDialog>
+                </div>
               }
               footer={
                 <div className="flex items-center justify-between">
@@ -120,7 +131,7 @@ export default function TicTacEventPage() {
                   </div>
                   <ul className="flex space-x-2">
                     <li>
-                      <Button disabled={paginatedCodes.offset === 0}>
+                      <Button disabled={paginatedCodes.offset <= 0}>
                         <Link
                           to={`/events/${event.eventId}?codesPage=${paginatedCodes.offset / PAGE_LIMIT - 1}`}
                           preventScrollReset

@@ -7,6 +7,7 @@ export class TicketTypesRepositoryInMemory extends TicketTypesRepository {
   constructor(private readonly ticketTypes: TicketType[] = []) {
     super();
   }
+
   async save(ticketType: TicketType): Promise<void> {
     const index = this.ticketTypes.findIndex((t) => t.ticketTypeId.value === ticketType.ticketTypeId.value);
     if (index === -1) {

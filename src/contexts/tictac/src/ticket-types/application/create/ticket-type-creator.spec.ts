@@ -5,11 +5,13 @@ import { TicketTypesRepository } from '../../domain/ticket-types-repository';
 import { TicketTypeCreator } from './ticket-type-creator';
 import { TicketTypesRepositoryInMemory } from '../../infrastructure/persistence/in-memory/ticket-types-repository-in-memory';
 import { TicketTypeId } from '@tictac/tictac/src/kernel/domain/ticket-type-id';
+import { QueryBus } from '@tictac/kernel/src/domain/query-bus';
 
 describe('TicketTypeCreator', () => {
   let ticketTypeCreator: TicketTypeCreator;
   let ticketTypesRepository: TicketTypesRepository;
   let eventBus: EventBus;
+  let queryBus: QueryBus;
 
   beforeEach(() => {
     ticketTypesRepository = new TicketTypesRepositoryInMemory();
@@ -17,7 +19,15 @@ describe('TicketTypeCreator', () => {
       publish: jest.fn(),
       addSubscribers: jest.fn(),
     };
-    ticketTypeCreator = new TicketTypeCreator(eventBus, ticketTypesRepository);
+    queryBus = {
+      ask: jest.fn().mockResolvedValue({
+        eventId: 'event-id',
+        name: 'event-name',
+        eventDate: new Date(),
+        scanning: false,
+      }),
+    };
+    ticketTypeCreator = new TicketTypeCreator(eventBus, queryBus, ticketTypesRepository);
   });
 
   it('should create a ticket type', async () => {
@@ -43,5 +53,18 @@ describe('TicketTypeCreator', () => {
         },
       }),
     ]);
+  });
+
+  it('should throw an error if the event is scanning', async () => {
+    (queryBus.ask as jest.Mock).mockResolvedValue({
+      eventId: 'event-id',
+      name: 'event-name',
+      eventDate: new Date(),
+      scanning: true,
+    });
+
+    await expect(
+      ticketTypeCreator.execute({ ticketTypeId: 'ticket-type-id', name: 'VIP', eventId: 'event-id' })
+    ).rejects.toThrow('Scanning event is not editable');
   });
 });
