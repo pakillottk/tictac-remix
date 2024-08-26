@@ -7,7 +7,11 @@ import { TicTacEventPrimitives } from '@tictac/tictac/src/events/domain/tictac-e
 export function EventCard({ event }: { event: TicTacEventPrimitives }) {
   return (
     <Card className="overflow-hidden">
-      <img src={event.eventImage ?? ''} alt={`${event.name}`} className="w-full h-48 object-cover" />
+      {event.eventImage ? (
+        <img src={event.eventImage} alt={`${event.name}`} className="w-full h-48 object-cover" />
+      ) : (
+        <div className="h-48 bg-gray-200 flex items-center justify-center text-black">{event.name}</div>
+      )}
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
           <span>{event.name}</span>

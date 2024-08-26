@@ -18,10 +18,21 @@ import { TicketTypeCreator } from '@tictac/tictac/src/ticket-types/application/c
 import { TicketTypeEditor } from '@tictac/tictac/src/ticket-types/application/edit/ticket-type-editor';
 import { TicketTypeDeleter } from '@tictac/tictac/src/ticket-types/application/delete/ticket-type-deleter';
 
+import { CodesMother } from '@tictac/tictac/src/codes/infrastructure/testing/codes-mother';
+import { CodesRepository } from '@tictac/tictac/src/codes/domain/codes-repository';
+import { CodesRepositoryInMemory } from '@tictac/tictac/src/codes/infrastructure/persistence/in-memory/codes-repository-in-memory';
+import { CodesByTicketTypesIdsFinder } from '@tictac/tictac/src/codes/application/find-by-ticket-types-ids/codes-by-ticket-types-ids-finder';
+import { CodeTicketType } from '@tictac/tictac/src/codes/domain/code-ticket-type';
+
 // TODO(pgm): These are for development purposes...
 const events = Array.from({ length: 2 }, () => TicTacEventsMother.random());
 const ticketTypes = events.flatMap((event) => {
   return Array.from({ length: 3 }, () => TicketTypesMother.randomForEvent(event.eventId));
+});
+const codes = ticketTypes.flatMap((ticketType) => {
+  return Array.from({ length: 10 }, () =>
+    CodesMother.withTicketType(new CodeTicketType(ticketType.ticketTypeId, ticketType.name), ticketType.eventId)
+  );
 });
 
 const container = new Container();
@@ -42,5 +53,10 @@ container.bind(TicketTypesByEventFinder).to(TicketTypesByEventFinder);
 container.bind(TicketTypeCreator).to(TicketTypeCreator);
 container.bind(TicketTypeEditor).to(TicketTypeEditor);
 container.bind(TicketTypeDeleter).to(TicketTypeDeleter);
+
+// Codes
+container.bind(CodesRepository).toConstantValue(new CodesRepositoryInMemory(codes));
+
+container.bind(CodesByTicketTypesIdsFinder).to(CodesByTicketTypesIdsFinder);
 
 export { container };

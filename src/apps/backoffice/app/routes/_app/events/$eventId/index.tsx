@@ -1,33 +1,48 @@
 import { json, LoaderFunctionArgs } from '@remix-run/node';
+import { Link, MetaFunction, useLoaderData, useSearchParams } from '@remix-run/react';
 
-import { CalendarIcon, ClockIcon, FilePenIcon, MapPinIcon, PlusIcon, TrashIcon, UsersIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+
+import TicketTypesTable from '~/components/ticket-types-table/ticket-types-table';
+import { CodesTable } from '~/components/codes-table/codes-table';
+import { EventDetails } from '~/components/event-details/event-details';
 
 import { TictacEventFinder } from '@tictac/tictac/src/events/application/find/tictac-event-finder';
-import { MetaFunction, useLoaderData } from '@remix-run/react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-
-import CreateTicketTypeDialog from '~/components/forms/ticket-types/create-ticket-type-dialog';
+import { TicketTypesByEventFinder } from '@tictac/tictac/src/ticket-types/application/find-by-event/ticket-types-by-event-finder';
+import { CodesByTicketTypesIdsFinder } from '@tictac/tictac/src/codes/application/find-by-ticket-types-ids/codes-by-ticket-types-ids-finder';
 
 import { container } from '~/container';
 import assert from 'assert';
-import { TicketTypesByEventFinder } from '@tictac/tictac/src/ticket-types/application/find-by-event/ticket-types-by-event-finder';
-import EditTicketTypeDialog from '~/components/forms/ticket-types/edit-ticket-type-dialog';
-import { DeleteTicketTypeDialog } from '~/components/forms/ticket-types/delete-ticket-type-dialog';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-export async function loader({ params }: LoaderFunctionArgs) {
+const PAGE_LIMIT = 25;
+
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  const url = new URL(request.url);
+
   const eventFinder = container.get<TictacEventFinder>(TictacEventFinder);
   assert(!!eventFinder);
 
   const ticketTypesFinder = container.get<TicketTypesByEventFinder>(TicketTypesByEventFinder);
   assert(!!ticketTypesFinder);
 
+  const codesFinder = container.get<CodesByTicketTypesIdsFinder>(CodesByTicketTypesIdsFinder);
+  assert(!!codesFinder);
+
+  const desiredCodeTicketType = url.searchParams.get('codeTicketType') ?? null;
+
   const event = await eventFinder.execute(params.eventId ?? '');
   const ticketTypes = await ticketTypesFinder.execute(params.eventId ?? '');
-  return json({ event, ticketTypes, GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY });
+  const paginatedCodes = await codesFinder.execute({
+    ticketTypesIds:
+      desiredCodeTicketType && desiredCodeTicketType !== '*'
+        ? [desiredCodeTicketType]
+        : ticketTypes.map((ticketType) => ticketType.ticketTypeId),
+    limit: PAGE_LIMIT,
+    offset: parseInt(url.searchParams.get('codesPage') ?? '0') * PAGE_LIMIT,
+  });
+  return json({ event, ticketTypes, paginatedCodes, GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY });
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -35,18 +50,26 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export default function TicTacEventPage() {
-  const { event: eventJson, ticketTypes, GOOGLE_MAPS_API_KEY } = useLoaderData<typeof loader>();
+  const { event: eventJson, ticketTypes, paginatedCodes, GOOGLE_MAPS_API_KEY } = useLoaderData<typeof loader>();
   const event = { ...eventJson, eventDate: new Date(eventJson.eventDate) };
+  const codes = paginatedCodes.codes.map((code) => ({
+    ...code,
+    scannedAt: code.scannedAt ? new Date(code.scannedAt) : null,
+  }));
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   return (
     <>
       <div className="grid md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
-          <img
-            src={event.eventImage ?? ''}
-            alt={`${event.name}`}
-            className="w-full h-64 md:h-96 object-cover rounded-lg mb-6"
-          />
+          {event.eventImage && (
+            <img
+              src={event.eventImage}
+              alt={`${event.name}`}
+              className="w-full h-64 md:h-96 object-cover rounded-lg mb-6"
+            />
+          )}
           <h1 className="text-3xl font-bold mb-2">{event.name}</h1>
           <div className="flex items-center mb-4">
             <Badge variant={event.scanning ? 'default' : 'secondary'} className="mr-2">
@@ -56,107 +79,75 @@ export default function TicTacEventPage() {
           </div>
 
           <div>
-            <Card>
-              <CardHeader>
-                <CardTitle>Tipos de Entrada</CardTitle>
-                <CardDescription>Gestionar los tipos de entrada.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table className="text-xs sm:text-base">
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Tipo</TableHead>
-                      <TableHead>Escaneado</TableHead>
-                      <TableHead>Acciones</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {ticketTypes.map((ticket) => (
-                      <TableRow key={ticket.ticketTypeId}>
-                        <TableCell className="font-medium">{ticket.name}</TableCell>
-                        <TableCell>
-                          {ticket.scannedAmmount} / {ticket.ammount}
-                        </TableCell>
-                        <TableCell className="flex items-center gap-2">
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger>
-                                <EditTicketTypeDialog ticketType={ticket}>
-                                  <Button disabled={event.scanning} variant="outline" size="icon">
-                                    <FilePenIcon className="h-4 w-4" />
-                                    <span className="sr-only">Editar</span>
-                                  </Button>
-                                </EditTicketTypeDialog>
-                              </TooltipTrigger>
-                              <TooltipContent>Editar</TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
+            <TicketTypesTable ticketTypes={ticketTypes} readOnly={event.scanning} />
+          </div>
 
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger>
-                                <DeleteTicketTypeDialog ticketType={ticket}>
-                                  <Button
-                                    disabled={event.scanning}
-                                    variant="outline"
-                                    size="icon"
-                                    className="text-red-500"
-                                  >
-                                    <TrashIcon className="h-4 w-4" />
-                                    <span className="sr-only">Eliminar</span>
-                                  </Button>
-                                </DeleteTicketTypeDialog>
-                              </TooltipTrigger>
-                              <TooltipContent>Eliminar</TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        </TableCell>
-                      </TableRow>
+          <div className="mt-4">
+            <CodesTable
+              codes={codes}
+              readOnly={event.scanning}
+              header={
+                <Select
+                  defaultValue="*"
+                  onValueChange={(value) => {
+                    setSearchParams(
+                      { ...searchParams, codesPage: '0', codeTicketType: value },
+                      { preventScrollReset: true }
+                    );
+                  }}
+                >
+                  <SelectTrigger className="w-40">
+                    <SelectValue placeholder="Filtrar por tipo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="*">Todos</SelectItem>
+                    {ticketTypes.map((ticketType) => (
+                      <SelectItem key={ticketType.ticketTypeId} value={ticketType.ticketTypeId}>
+                        {ticketType.name}
+                      </SelectItem>
                     ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-              <CardFooter className="justify-end">
-                <CreateTicketTypeDialog>
-                  <Button disabled={event.scanning}>
-                    <PlusIcon className="mr-2 h-4 w-4" />
-                    Nuevo tipo de entrada
-                  </Button>
-                </CreateTicketTypeDialog>
-              </CardFooter>
-            </Card>
+                  </SelectContent>
+                </Select>
+              }
+              footer={
+                <div className="flex items-center justify-between">
+                  <div>
+                    Página {paginatedCodes.offset / PAGE_LIMIT + 1} de{' '}
+                    {Math.ceil((paginatedCodes.total || 1) / PAGE_LIMIT)}
+                    {paginatedCodes.total ? (
+                      <span className="text-muted-foreground"> ({paginatedCodes.total} códigos)</span>
+                    ) : null}
+                  </div>
+                  <ul className="flex space-x-2">
+                    <li>
+                      <Button disabled={paginatedCodes.offset === 0}>
+                        <Link
+                          to={`/events/${event.eventId}?codesPage=${paginatedCodes.offset / PAGE_LIMIT - 1}`}
+                          preventScrollReset
+                        >
+                          Anterior
+                        </Link>
+                      </Button>
+                    </li>
+                    <li>
+                      <Button disabled={paginatedCodes.offset + paginatedCodes.count >= paginatedCodes.total}>
+                        <Link
+                          to={`/events/${event.eventId}?codesPage=${paginatedCodes.offset / PAGE_LIMIT + 1}`}
+                          preventScrollReset
+                        >
+                          Siguiente
+                        </Link>
+                      </Button>
+                    </li>
+                  </ul>
+                </div>
+              }
+            />
           </div>
         </div>
 
         <div>
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold mb-4">Detalles</h2>
-              <div className="space-y-4">
-                <div className="flex items-center">
-                  <CalendarIcon className="mr-2 h-5 w-5" />
-                  <span>{event.eventDate.toDateString()}</span>
-                </div>
-                <div className="flex items-center">
-                  <ClockIcon className="mr-2 h-5 w-5" />
-                  <span>{event.eventDate.getHours()}</span>
-                </div>
-                <div className="flex items-center">
-                  <MapPinIcon className="mr-2 h-5 w-5" />
-                  <span>{event.eventLocation}</span>
-                </div>
-
-                <iframe
-                  src={`https://www.google.com/maps/embed/v1/place?key=${GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(event.eventLocation)}`}
-                  width="100%"
-                  height="150"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                />
-              </div>
-            </CardContent>
-          </Card>
+          <EventDetails event={event} mapsApiKey={GOOGLE_MAPS_API_KEY ?? ''} />
         </div>
       </div>
     </>
