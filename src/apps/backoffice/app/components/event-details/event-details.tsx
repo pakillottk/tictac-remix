@@ -2,7 +2,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { TicTacEventPrimitives } from '@tictac/tictac/src/events/domain/tictac-event';
 import { CalendarIcon, ClockIcon, MapPinIcon } from 'lucide-react';
 
-export function EventDetails({ event, mapsApiKey }: { event: TicTacEventPrimitives; mapsApiKey?: string }) {
+export function EventDetails({ event }: { event: TicTacEventPrimitives }) {
   return (
     <Card>
       <CardContent className="p-6">
@@ -21,16 +21,14 @@ export function EventDetails({ event, mapsApiKey }: { event: TicTacEventPrimitiv
             <span>{event.eventLocation}</span>
           </div>
 
-          {mapsApiKey && (
-            <iframe
-              src={`https://www.google.com/maps/embed/v1/place?key=${mapsApiKey}&q=${encodeURIComponent(event.eventLocation)}`}
-              width="100%"
-              height="150"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-            />
-          )}
+          <iframe
+            src={`https://maps.google.com/maps?q=${event.eventLocation}&output=embed`}
+            width="100%"
+            height="300"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+          />
         </div>
       </CardContent>
     </Card>
