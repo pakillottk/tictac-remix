@@ -55,6 +55,10 @@ export class CodesRepositoryInMemory extends CodesRepository {
     };
   }
 
+  async countByTicketTypeId(ticketId: TicketTypeId): Promise<number> {
+    return this.codes.filter((c) => c.ticketType.id.value === ticketId.value).length;
+  }
+
   async findAll() {
     return this.codes;
   }

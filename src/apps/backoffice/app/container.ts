@@ -22,7 +22,11 @@ import { TicTacEventCreator } from '@tictac/tictac/src/events/application/create
 import { EventBasicInfoQueryHandler } from '@tictac/tictac/src/events/application/query-handlers/event-basic-info-query-handler';
 
 import { TicketTypesMother } from '@tictac/tictac/src/ticket-types/infrastructure/testing/ticket-types-mother';
-import { OnCodeCreatedUpdateTicketTypeAmmount } from '@tictac/tictac/src/ticket-types/application/event-handlers/on-code-created-update-ticket-type-ammount';
+
+import { OnBulkCodeCreationUpdateTicketTypeAmmount } from '@tictac/tictac/src/ticket-types/application/event-handlers/on-bulk-code-creation-update-ticket-type-ammount';
+
+import { CodeCountByTicketIdQueryHandler } from '@tictac/tictac/src/codes/application/query-handlers/code-count-by-ticket-id-query-handler';
+
 import { TicketTypesRepository } from '@tictac/tictac/src/ticket-types/domain/ticket-types-repository';
 import { TicketTypesRepositoryInMemory } from '@tictac/tictac/src/ticket-types/infrastructure/persistence/in-memory/ticket-types-repository-in-memory';
 import { TicketTypesByEventFinder } from '@tictac/tictac/src/ticket-types/application/find-by-event/ticket-types-by-event-finder';
@@ -53,6 +57,7 @@ const container = new Container();
 
 // Queries
 container.bind<QueryHandler<Query, Response>>(QueryHandler).to(EventBasicInfoQueryHandler);
+container.bind<QueryHandler<Query, Response>>(QueryHandler).to(CodeCountByTicketIdQueryHandler);
 
 container.bind<QueryBus>(QueryBus).toDynamicValue((ctx) => {
   const handlers = ctx.container.getAll<QueryHandler<Query, Response>>(QueryHandler);
@@ -62,7 +67,7 @@ container.bind<QueryBus>(QueryBus).toDynamicValue((ctx) => {
 
 // DomainEvents
 container.bind<DomainEventSubscriber<DomainEvent>>(DomainEventSubscriber).to(OnTicketTypeEditedUpdateCodesTicketTypes);
-container.bind<DomainEventSubscriber<DomainEvent>>(DomainEventSubscriber).to(OnCodeCreatedUpdateTicketTypeAmmount);
+container.bind<DomainEventSubscriber<DomainEvent>>(DomainEventSubscriber).to(OnBulkCodeCreationUpdateTicketTypeAmmount);
 
 container.bind<EventBus>(EventBus).toDynamicValue((ctx) => {
   const eventBus = new InMemoryAsyncEventBus();

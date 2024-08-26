@@ -73,6 +73,14 @@ export class TicketType extends AggregateRoot {
     return incrementedTicketType;
   }
 
+  public setAmmount(ammount: number): TicketType {
+    const updatedTicketType = new TicketType(this.ticketTypeId, this.name, ammount, this.scannedAmmount, this.eventId);
+
+    // TODO: domain events
+
+    return updatedTicketType;
+  }
+
   public delete(): void {
     this.record(new TicketTypeDeletedEvent(this.toPrimitives(), this.ticketTypeId.value));
   }

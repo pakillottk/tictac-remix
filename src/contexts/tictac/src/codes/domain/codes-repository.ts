@@ -17,5 +17,7 @@ export abstract class CodesRepository {
     offset: number
   ): Promise<{ codes: Code[]; count: number }>;
 
+  abstract countByTicketTypeId(ticketId: TicketTypeId): Promise<number>;
+
   abstract findAll(): Promise<Code[]>;
 }
