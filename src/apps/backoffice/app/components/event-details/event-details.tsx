@@ -13,10 +13,6 @@ export function EventDetails({ event }: { event: TicTacEventPrimitives }) {
             <span>{event.eventDate.toDateString()}</span>
           </div>
           <div className="flex items-center">
-            <ClockIcon className="mr-2 h-5 w-5" />
-            <span>{event.eventDate.getHours()}</span>
-          </div>
-          <div className="flex items-center">
             <MapPinIcon className="mr-2 h-5 w-5" />
             <span>{event.eventLocation}</span>
           </div>

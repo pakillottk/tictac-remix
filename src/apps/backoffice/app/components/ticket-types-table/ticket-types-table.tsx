@@ -21,6 +21,14 @@ export default function TicketTypesTable({
         <CardHeader>
           <CardTitle>Tipos de Entrada</CardTitle>
           <CardDescription>Gestionar los tipos de entrada.</CardDescription>
+          <div className="flex justify-end">
+            <CreateTicketTypeDialog>
+              <Button disabled={readOnly}>
+                <PlusIcon className="mr-2 h-4 w-4" />
+                Nuevo tipo de entrada
+              </Button>
+            </CreateTicketTypeDialog>
+          </div>
         </CardHeader>
         <CardContent>
           <Table className="text-xs sm:text-base">
@@ -67,14 +75,7 @@ export default function TicketTypesTable({
             </TableFooter>
           </Table>
         </CardContent>
-        <CardFooter className="justify-end">
-          <CreateTicketTypeDialog>
-            <Button disabled={readOnly}>
-              <PlusIcon className="mr-2 h-4 w-4" />
-              Nuevo tipo de entrada
-            </Button>
-          </CreateTicketTypeDialog>
-        </CardFooter>
+        <CardFooter className="justify-end"></CardFooter>
       </Card>
     </>
   );

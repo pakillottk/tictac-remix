@@ -65,10 +65,6 @@ export default function TicTacEventPage() {
   return (
     <>
       <div className="flex flex-col flexflex-wrap space-y-6 relative">
-        {event.eventImage && (
-          <img src={event.eventImage} alt={`${event.name}`} className="w-full h-64 md:h-96 object-cover rounded-lg" />
-        )}
-
         <header className="sticky top-16 z-10 bg-background">
           <h1 className="text-3xl font-bold mb-2">{event.name}</h1>
           <div className="flex items-center mb-4">
@@ -78,6 +74,10 @@ export default function TicTacEventPage() {
             <span className="text-sm text-muted-foreground">Organizado por {event.ownerName}</span>
           </div>
         </header>
+
+        {event.eventImage && (
+          <img src={event.eventImage} alt={`${event.name}`} className="w-full h-64 md:h-96 object-cover rounded-lg" />
+        )}
 
         <div>
           <EventDetails event={event} />
