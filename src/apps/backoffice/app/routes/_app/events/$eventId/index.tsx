@@ -1,6 +1,6 @@
 import { json, LoaderFunctionArgs } from '@remix-run/node';
 
-import { CalendarIcon, ClockIcon, FilePenIcon, MapPinIcon, TrashIcon, UsersIcon } from 'lucide-react';
+import { CalendarIcon, ClockIcon, FilePenIcon, MapPinIcon, PlusIcon, TrashIcon, UsersIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -16,6 +16,7 @@ import assert from 'assert';
 import { TicketTypesByEventFinder } from '@tictac/tictac/src/ticket-types/application/find-by-event/ticket-types-by-event-finder';
 import EditTicketTypeDialog from '~/components/forms/ticket-types/edit-ticket-type-dialog';
 import { DeleteTicketTypeDialog } from '~/components/forms/ticket-types/delete-ticket-type-dialog';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const eventFinder = container.get<TictacEventFinder>(TictacEventFinder);
@@ -26,7 +27,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
   const event = await eventFinder.execute(params.eventId ?? '');
   const ticketTypes = await ticketTypesFinder.execute(params.eventId ?? '');
-  return json({ event, ticketTypes });
+  return json({ event, ticketTypes, GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY });
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -34,7 +35,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export default function TicTacEventPage() {
-  const { event: eventJson, ticketTypes } = useLoaderData<typeof loader>();
+  const { event: eventJson, ticketTypes, GOOGLE_MAPS_API_KEY } = useLoaderData<typeof loader>();
   const event = { ...eventJson, eventDate: new Date(eventJson.eventDate) };
 
   return (
@@ -61,11 +62,11 @@ export default function TicTacEventPage() {
                 <CardDescription>Gestionar los tipos de entrada.</CardDescription>
               </CardHeader>
               <CardContent>
-                <Table>
+                <Table className="text-xs sm:text-base">
                   <TableHeader>
                     <TableRow>
                       <TableHead>Tipo</TableHead>
-                      <TableHead>Precio</TableHead>
+                      <TableHead>Escaneado</TableHead>
                       <TableHead>Acciones</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -73,20 +74,42 @@ export default function TicTacEventPage() {
                     {ticketTypes.map((ticket) => (
                       <TableRow key={ticket.ticketTypeId}>
                         <TableCell className="font-medium">{ticket.name}</TableCell>
-                        <TableCell>${ticket.price.toFixed(2)}</TableCell>
+                        <TableCell>
+                          {ticket.scannedAmmount} / {ticket.ammount}
+                        </TableCell>
                         <TableCell className="flex items-center gap-2">
-                          <EditTicketTypeDialog ticketType={ticket}>
-                            <Button disabled={event.scanning} variant="outline" size="icon">
-                              <FilePenIcon className="h-4 w-4" />
-                              <span className="sr-only">Editar</span>
-                            </Button>
-                          </EditTicketTypeDialog>
-                          <DeleteTicketTypeDialog ticketType={ticket}>
-                            <Button disabled={event.scanning} variant="outline" size="icon" className="text-red-500">
-                              <TrashIcon className="h-4 w-4" />
-                              <span className="sr-only">Eliminar</span>
-                            </Button>
-                          </DeleteTicketTypeDialog>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger>
+                                <EditTicketTypeDialog ticketType={ticket}>
+                                  <Button disabled={event.scanning} variant="outline" size="icon">
+                                    <FilePenIcon className="h-4 w-4" />
+                                    <span className="sr-only">Editar</span>
+                                  </Button>
+                                </EditTicketTypeDialog>
+                              </TooltipTrigger>
+                              <TooltipContent>Editar</TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger>
+                                <DeleteTicketTypeDialog ticketType={ticket}>
+                                  <Button
+                                    disabled={event.scanning}
+                                    variant="outline"
+                                    size="icon"
+                                    className="text-red-500"
+                                  >
+                                    <TrashIcon className="h-4 w-4" />
+                                    <span className="sr-only">Eliminar</span>
+                                  </Button>
+                                </DeleteTicketTypeDialog>
+                              </TooltipTrigger>
+                              <TooltipContent>Eliminar</TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -94,7 +117,12 @@ export default function TicTacEventPage() {
                 </Table>
               </CardContent>
               <CardFooter className="justify-end">
-                <CreateTicketTypeDialog />
+                <CreateTicketTypeDialog>
+                  <Button disabled={event.scanning}>
+                    <PlusIcon className="mr-2 h-4 w-4" />
+                    Nuevo tipo de entrada
+                  </Button>
+                </CreateTicketTypeDialog>
               </CardFooter>
             </Card>
           </div>
@@ -117,6 +145,15 @@ export default function TicTacEventPage() {
                   <MapPinIcon className="mr-2 h-5 w-5" />
                   <span>{event.eventLocation}</span>
                 </div>
+
+                <iframe
+                  src={`https://www.google.com/maps/embed/v1/place?key=${GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(event.eventLocation)}`}
+                  width="100%"
+                  height="150"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                />
               </div>
             </CardContent>
           </Card>

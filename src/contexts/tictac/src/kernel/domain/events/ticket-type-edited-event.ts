@@ -4,11 +4,9 @@ export interface TicketTypeUpdatedEventAttributes {
   ticketTypeId: string;
   oldValues: {
     name: string;
-    price: number;
   };
   newValues: {
     name: string;
-    price: number;
   };
   eventId: string;
 }

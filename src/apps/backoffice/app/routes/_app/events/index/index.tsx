@@ -7,6 +7,8 @@ import CreateEventDialog from '~/components/forms/events/create-event-dialog';
 import { ActionFunctionArgs } from '@remix-run/node';
 import { TicTacEventCreator } from '@tictac/tictac/src/events/application/create/tictac-event-creator';
 import { CreateEventFormDtoSchema } from '~/components/forms/events/create-event-form';
+import { Button } from '@/components/ui/button';
+import { PlusIcon } from 'lucide-react';
 
 export async function loader() {
   const searcher = container.get<TicTacEventsAllSearcher>(TicTacEventsAllSearcher);
@@ -21,7 +23,12 @@ export default function Events() {
     <>
       <header className="flex justify-between items-center sticky bg-back mb-2">
         <h1 className="text-3xl font-bold">Eventos</h1>
-        <CreateEventDialog />
+        <CreateEventDialog>
+          <Button>
+            <PlusIcon className="mr-2 h-4 w-4" />
+            Nuevo evento
+          </Button>
+        </CreateEventDialog>
       </header>
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {events.length === 0

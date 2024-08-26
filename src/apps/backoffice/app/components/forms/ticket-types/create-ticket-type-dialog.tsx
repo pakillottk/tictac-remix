@@ -1,23 +1,25 @@
 import { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { PlusIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+
 import CreateTicketTypeForm from './create-ticket-type-form';
 
-export default function CreateTicketTypeDialog() {
+export default function CreateTicketTypeDialog({ children }: { children: React.ReactNode }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <PlusIcon className="mr-2 h-4 w-4" />
-          Nuevo tipo de entrada
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Crear nuevo tipo de entrada</DialogTitle>
+          <DialogDescription>Ingresa los datos del nuevo tipo de entrada.</DialogDescription>
         </DialogHeader>
         <CreateTicketTypeForm
           onFormSubmitted={(values) => {

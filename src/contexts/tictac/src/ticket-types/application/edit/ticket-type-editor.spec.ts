@@ -28,7 +28,6 @@ describe('TicketTypeEditor', () => {
     const params = {
       ticketTypeId: ticketType.ticketTypeId.value,
       name: editedTicketType.name,
-      price: editedTicketType.price,
     };
 
     await ticketTypeEditor.execute(params);
@@ -37,18 +36,15 @@ describe('TicketTypeEditor', () => {
     expect(found?.toPrimitives()).toEqual({
       ...ticketType.toPrimitives(),
       name: editedTicketType.name,
-      price: editedTicketType.price,
     });
 
     const expectedDomainEvent = {
       ticketTypeId: ticketType.ticketTypeId.value,
       oldValues: {
         name: ticketType.name,
-        price: ticketType.price,
       },
       newValues: {
         name: editedTicketType.name,
-        price: editedTicketType.price,
       },
       eventId: ticketType.eventId.value,
     };

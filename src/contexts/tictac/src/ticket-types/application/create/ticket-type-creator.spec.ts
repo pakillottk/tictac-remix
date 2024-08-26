@@ -23,17 +23,15 @@ describe('TicketTypeCreator', () => {
   it('should create a ticket type', async () => {
     const ticketTypeId = crypto.randomUUID().toString();
     const name = 'VIP';
-    const price = 1000;
     const eventId = crypto.randomUUID().toString();
 
-    await ticketTypeCreator.execute({ ticketTypeId, name, price, eventId });
+    await ticketTypeCreator.execute({ ticketTypeId, name, eventId });
 
     const ticketType = await ticketTypesRepository.findById(new TicketTypeId(ticketTypeId));
 
     expect(ticketType).not.toBeNull();
     expect(ticketType?.ticketTypeId.value).toBe(ticketTypeId);
     expect(ticketType?.name).toBe(name);
-    expect(ticketType?.price).toBe(price);
     expect(ticketType?.eventId.value).toBe(eventId);
 
     expect(eventBus.publish).toHaveBeenCalledWith([
@@ -41,7 +39,6 @@ describe('TicketTypeCreator', () => {
         attributes: {
           ticketTypeId,
           name,
-          price,
           eventId,
         },
       }),

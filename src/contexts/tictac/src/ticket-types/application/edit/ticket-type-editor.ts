@@ -6,7 +6,6 @@ import { TicketTypeId } from '@tictac/tictac/src/kernel/domain/ticket-type-id';
 export interface TicketTypeEditorParamaters {
   ticketTypeId: string;
   name: string;
-  price: number;
 }
 
 @injectable()
@@ -23,7 +22,7 @@ export class TicketTypeEditor {
       throw new Error('Ticket type not found');
     }
 
-    const editedTicketType = ticketType.edit(params.name, params.price);
+    const editedTicketType = ticketType.edit(params.name);
     await this.ticketTypeRepository.save(editedTicketType);
 
     this.eventBus.publish(ticketType.pullDomainEvents());

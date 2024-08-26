@@ -3,7 +3,6 @@ import { DomainEvent } from '@tictac/kernel/src/domain/domain-event';
 export interface TicketTypeCreatedEventAttributes {
   ticketTypeId: string;
   name: string;
-  price: number;
   eventId: string;
 }
 

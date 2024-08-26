@@ -8,7 +8,6 @@ import { EventBus } from '@tictac/kernel/src/domain/event-bus';
 export interface TicketTypeCreatorParameters {
   ticketTypeId: string;
   name: string;
-  price: number;
   eventId: string;
 }
 
@@ -25,7 +24,6 @@ export class TicketTypeCreator {
     const ticketType = TicketType.create(
       new TicketTypeId(parameters.ticketTypeId),
       parameters.name,
-      parameters.price,
       new EventId(parameters.eventId)
     );
     await this.ticketTypesRepository.save(ticketType);

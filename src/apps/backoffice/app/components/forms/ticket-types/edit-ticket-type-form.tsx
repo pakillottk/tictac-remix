@@ -16,9 +16,6 @@ export const EditTicketTypeFormDtoSchema = z.object({
   name: z.string().min(2, {
     message: 'El nombre del tipo de entrada debe tener al menos 2 caracteres.',
   }),
-  price: z.coerce.number().min(0, {
-    message: 'El precio de la entrada debe ser mayor o igual a 0.',
-  }),
 });
 
 export type EditTicketTypeFormDto = z.infer<typeof EditTicketTypeFormDtoSchema>;
@@ -39,7 +36,6 @@ export default function EditTicketTypeForm({
     resolver: zodResolver(EditTicketTypeFormDtoSchema),
     defaultValues: {
       name: ticketType.name,
-      price: ticketType.price,
     },
   });
 
@@ -65,50 +61,27 @@ export default function EditTicketTypeForm({
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader>
-        <CardTitle>Editar tipo de entrada</CardTitle>
-        <CardDescription>Editar el tipo de entrada</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form ref={formRef} className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="grid gap-2">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nombre</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Introduzca nombre del tipo de entrada" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="grid gap-2">
-              <FormField
-                control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Precio</FormLabel>
-                    <FormControl>
-                      <Input type="number" placeholder="0.00" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <Button type="submit" className="w-full">
-              Guardar
-            </Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+    <Form {...form}>
+      <form ref={formRef} className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="grid gap-2">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nombre</FormLabel>
+                <FormControl>
+                  <Input placeholder="Introduzca nombre del tipo de entrada" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <Button type="submit" className="w-full">
+          Guardar
+        </Button>
+      </form>
+    </Form>
   );
 }

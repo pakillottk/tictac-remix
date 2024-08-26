@@ -69,3 +69,22 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Google Maps Autocomplete */
+:root.dark .pac-container {
+  background-color: #282828;
+  color: #eee;
+}
+
+:root.dark .pac-item {
+  color: #aaa;
+  border-top: 1px solid #333;
+}
+
+:root.dark .pac-item:hover {
+  background-color: #333;
+}
+
+:root.dark .pac-item-query {
+  color: #eee;
+}

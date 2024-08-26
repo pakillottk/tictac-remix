@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import EditTicketTypeForm from './edit-ticket-type-form';
 import { TicketTypePrimitives } from '@tictac/tictac/src/ticket-types/domain/ticket-type';
 
@@ -17,7 +24,8 @@ export default function EditTicketTypeDialog({
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Crear nuevo tipo de entrada</DialogTitle>
+          <DialogTitle>Editar tipo de entrada</DialogTitle>
+          <DialogDescription>Modifica los datos del tipo de entrada.</DialogDescription>
         </DialogHeader>
         <EditTicketTypeForm
           ticketType={ticketType}

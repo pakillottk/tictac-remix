@@ -1,4 +1,4 @@
-import { fa, faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 import { TicketType } from '../../domain/ticket-type';
 import { EventId } from '@tictac/tictac/src/kernel/domain/event-id';
 
@@ -7,9 +7,8 @@ export class TicketTypesMother {
     return TicketType.fromPrimitives({
       ticketTypeId: faker.string.uuid(),
       name: faker.commerce.productName(),
-      price: faker.number.float({ min: 0, max: 120, multipleOf: 10.0 }),
-      ammount: faker.number.int({ min: 1 }),
-      scannedAmmount: faker.number.int({ min: 0 }),
+      ammount: faker.number.int({ min: 100, max: 20000 }),
+      scannedAmmount: faker.number.int({ min: 0, max: 20000 }),
       eventId: faker.string.uuid(),
     });
   }
@@ -18,9 +17,8 @@ export class TicketTypesMother {
     return TicketType.fromPrimitives({
       ticketTypeId: faker.string.uuid(),
       name: faker.commerce.productName(),
-      price: faker.number.float({ min: 0, max: 120, multipleOf: 10.0 }),
-      ammount: faker.number.int({ min: 1 }),
-      scannedAmmount: faker.number.int({ min: 0 }),
+      ammount: faker.number.int({ min: 100, max: 20000 }),
+      scannedAmmount: faker.number.int({ min: 0, max: 20000 }),
       eventId: eventId.value,
     });
   }

@@ -8,7 +8,6 @@ import { TicketTypeDeletedEvent } from '../../kernel/domain/events/ticket-type-d
 export interface TicketTypePrimitives {
   ticketTypeId: string;
   name: string;
-  price: number;
   ammount: number;
   scannedAmmount: number;
   eventId: string;
@@ -19,7 +18,6 @@ export class TicketType extends AggregateRoot {
     return new TicketType(
       new TicketTypeId(primitives.ticketTypeId),
       primitives.name,
-      primitives.price,
       primitives.ammount,
       primitives.scannedAmmount,
       new EventId(primitives.eventId)
@@ -29,7 +27,6 @@ export class TicketType extends AggregateRoot {
   constructor(
     public readonly ticketTypeId: TicketTypeId,
     public readonly name: string,
-    public readonly price: number,
     public readonly ammount: number,
     public readonly scannedAmmount: number,
     public readonly eventId: EventId
@@ -37,33 +34,23 @@ export class TicketType extends AggregateRoot {
     super();
   }
 
-  static create(ticketTypeId: TicketTypeId, name: string, price: number, eventId: EventId): TicketType {
-    const ticketType = new TicketType(ticketTypeId, name, price, 0, 0, eventId);
+  static create(ticketTypeId: TicketTypeId, name: string, eventId: EventId): TicketType {
+    const ticketType = new TicketType(ticketTypeId, name, 0, 0, eventId);
     ticketType.record(
-      new TicketTypeCreatedEvent(
-        { ticketTypeId: ticketTypeId.value, name, price, eventId: eventId.value },
-        ticketTypeId.value
-      )
+      new TicketTypeCreatedEvent({ ticketTypeId: ticketTypeId.value, name, eventId: eventId.value }, ticketTypeId.value)
     );
     return ticketType;
   }
 
-  public edit(name: string, price: number): TicketType {
-    const editedTicketType = new TicketType(
-      this.ticketTypeId,
-      name,
-      price,
-      this.ammount,
-      this.scannedAmmount,
-      this.eventId
-    );
+  public edit(name: string): TicketType {
+    const editedTicketType = new TicketType(this.ticketTypeId, name, this.ammount, this.scannedAmmount, this.eventId);
 
     this.record(
       new TicketTypeUpdatedEvent(
         {
           ticketTypeId: this.ticketTypeId.value,
-          oldValues: { name: this.name, price: this.price },
-          newValues: { name, price },
+          oldValues: { name: this.name },
+          newValues: { name },
           eventId: this.eventId.value,
         },
         this.ticketTypeId.value
@@ -81,7 +68,6 @@ export class TicketType extends AggregateRoot {
     return {
       ticketTypeId: this.ticketTypeId.value,
       name: this.name,
-      price: this.price,
       ammount: this.ammount,
       scannedAmmount: this.scannedAmmount,
       eventId: this.eventId.value,
