@@ -16,7 +16,7 @@ import assert from 'assert';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ImportCodesDialog } from '~/components/forms/codes/import-codes-dialog';
-import { PlusIcon } from 'lucide-react';
+import { ImportIcon, PlusIcon } from 'lucide-react';
 import { url } from 'inspector';
 
 const PAGE_LIMIT = 25;
@@ -117,8 +117,8 @@ export default function TicTacEventPage() {
 
                 <ImportCodesDialog>
                   <Button disabled={event.scanning}>
-                    <PlusIcon className="mr-2 h-4 w-4" />
-                    Importar códigos
+                    <ImportIcon className="mr-2 h-4 w-4" />
+                    Importar
                   </Button>
                 </ImportCodesDialog>
               </div>

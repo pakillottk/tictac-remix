@@ -7,6 +7,7 @@ import { pipe } from 'fp-ts/lib/function';
 import { CodeTicketType } from './code-ticket-type';
 import { CodeCreatedEvent } from '@tictac/tictac/src/kernel/domain/events/code-created-event';
 import { CodeDeletedEvent } from '../../kernel/domain/events/code-deleted-event';
+import { CodeScannedEvent } from '../../kernel/domain/events/code-scanned-event';
 
 export interface CodePrimitives {
   code: string;
@@ -67,6 +68,28 @@ export class Code extends AggregateRoot {
   public updateTicketType(ticketType: CodeTicketType): Code {
     // TODO(pgm): Domain events...
     return new Code(this.code, ticketType, this.eventId, this.scannedAt, this.scannedBy);
+  }
+
+  public scan(scannedBy: CodeScannedBy): Code {
+    if (this.isScanned) {
+      // TODO: Custom exception
+      throw new Error('Code already scanned');
+    }
+
+    const updatedCode = new Code(this.code, this.ticketType, this.eventId, some(new Date()), some(scannedBy));
+    updatedCode.record(
+      new CodeScannedEvent(
+        {
+          code: this.code.value,
+          ticketTypeId: this.ticketType.id.value,
+          eventId: this.eventId.value,
+          scannedBy: scannedBy.toPrimitives(),
+        },
+        this.code.value
+      )
+    );
+
+    return updatedCode;
   }
 
   toPrimitives(): CodePrimitives {

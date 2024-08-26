@@ -3,9 +3,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { CodePrimitives } from '@tictac/tictac/src/codes/domain/code';
-import { PlusIcon, TrashIcon } from 'lucide-react';
+import { CheckCircleIcon, PhoneIcon, PlusIcon, SmartphoneIcon, TrashIcon } from 'lucide-react';
 import { ImportCodesDialog } from '../forms/codes/import-codes-dialog';
 import { DeleteCodeDialog } from '../forms/codes/delete-code-dialog';
+import { ScanCodeDialog } from '../forms/codes/scan-code-dialog';
 
 export function CodesTable({
   codes,
@@ -26,46 +27,55 @@ export function CodesTable({
         {header}
       </CardHeader>
       <CardContent>
-        <Table className="text-xs sm:text-base">
-          <TableHeader>
-            <TableRow>
-              <TableHead>Tipo</TableHead>
-              <TableHead>Código</TableHead>
-              <TableHead>Escaneado</TableHead>
-              <TableHead>Acciones</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {codes.map((code) => (
-              <TableRow key={code.code}>
-                <TableCell>{code.ticketType.name}</TableCell>
-                <TableCell className="font-medium">{code.code}</TableCell>
-                <TableCell>
-                  {code.scannedAt
-                    ? new Date(code.scannedAt).toDateString() + ` (${code.scannedBy?.name})`
-                    : 'No escaneado'}
-                </TableCell>
-                <TableCell className="flex items-center gap-2">
-                  <DeleteCodeDialog code={code}>
-                    <Button disabled={readOnly} variant="outline" size="icon" className="text-red-500">
-                      <TrashIcon className="h-4 w-4" />
-                      <span className="sr-only">Eliminar</span>
-                    </Button>
-                  </DeleteCodeDialog>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-          {footer && (
-            <TableFooter>
+        <div className="relative w-full overflow-auto">
+          <Table className="text-xs sm:text-base">
+            <TableHeader>
               <TableRow>
-                <TableCell colSpan={4} className="text-center">
-                  {footer}
-                </TableCell>
+                <TableHead>Tipo</TableHead>
+                <TableHead>Código</TableHead>
+                <TableHead>Escaneado</TableHead>
+                <TableHead>Acciones</TableHead>
               </TableRow>
-            </TableFooter>
-          )}
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {codes.map((code) => (
+                <TableRow key={code.code}>
+                  <TableCell>{code.ticketType.name}</TableCell>
+                  <TableCell className="font-medium">{code.code}</TableCell>
+                  <TableCell>
+                    {code.scannedAt
+                      ? new Date(code.scannedAt).toDateString() + ` (${code.scannedBy?.name})`
+                      : 'No escaneado'}
+                  </TableCell>
+                  <TableCell className="flex items-center gap-2">
+                    <ScanCodeDialog code={code}>
+                      <Button disabled={!readOnly || code.scannedAt} variant="outline" size="icon">
+                        <CheckCircleIcon className="h-4 w-4" />
+                        <span className="sr-only">Escanear</span>
+                      </Button>
+                    </ScanCodeDialog>
+
+                    <DeleteCodeDialog code={code}>
+                      <Button disabled={readOnly} variant="outline" size="icon" className="text-red-500">
+                        <TrashIcon className="h-4 w-4" />
+                        <span className="sr-only">Eliminar</span>
+                      </Button>
+                    </DeleteCodeDialog>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            {footer && (
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center">
+                    {footer}
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
+            )}
+          </Table>
+        </div>
       </CardContent>
     </Card>
   );

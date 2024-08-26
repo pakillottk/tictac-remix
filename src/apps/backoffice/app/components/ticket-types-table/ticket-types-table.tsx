@@ -25,7 +25,7 @@ export default function TicketTypesTable({
             <CreateTicketTypeDialog>
               <Button disabled={readOnly}>
                 <PlusIcon className="mr-2 h-4 w-4" />
-                Nuevo tipo de entrada
+                Nuevo
               </Button>
             </CreateTicketTypeDialog>
           </div>

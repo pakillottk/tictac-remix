@@ -21,12 +21,12 @@ export default function Events() {
   const { events } = useLoaderData<typeof loader>();
   return (
     <>
-      <header className="flex justify-between items-center sticky bg-back mb-2">
+      <header className="flex justify-between items-center sticky top-16 z-10 p-4 bg-background mb-2">
         <h1 className="text-3xl font-bold">Eventos</h1>
         <CreateEventDialog>
           <Button>
             <PlusIcon className="mr-2 h-4 w-4" />
-            Nuevo evento
+            Nuevo
           </Button>
         </CreateEventDialog>
       </header>

@@ -1,7 +1,8 @@
+import { inject, injectable } from 'inversify';
+
 import { DomainEventClass } from '@tictac/kernel/src/domain/domain-event';
 import { DomainEventSubscriber } from '@tictac/kernel/src/domain/domain-event-subscriber';
 import { CodeDeletedEvent } from '@tictac/tictac/src/kernel/domain/events/code-deleted-event';
-import { inject } from 'inversify';
 import { TicketTypesRepository } from '../../domain/ticket-types-repository';
 import { QueryBus } from '@tictac/kernel/src/domain/query-bus';
 import { TicketTypeId } from '@tictac/tictac/src/kernel/domain/ticket-type-id';
@@ -10,6 +11,7 @@ import {
   CodeCountByTicketIdQueryResult,
 } from '@tictac/tictac/src/kernel/domain/queries/code-count-by-ticket-id-query';
 
+@injectable()
 export class OnCodeDeletedDecrementTicketTypeAmmount extends DomainEventSubscriber<CodeDeletedEvent> {
   constructor(
     @inject(QueryBus) private readonly queryBus: QueryBus,

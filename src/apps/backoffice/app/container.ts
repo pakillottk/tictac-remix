@@ -38,6 +38,7 @@ import { CodesMother } from '@tictac/tictac/src/codes/infrastructure/testing/cod
 
 import { OnTicketTypeEditedUpdateCodesTicketTypes } from '@tictac/tictac/src/codes/application/event-handlers/on-ticket-type-edited-update-codes-ticket-types';
 import { OnCodeDeletedDecrementTicketTypeAmmount } from '@tictac/tictac/src/ticket-types/application/event-handlers/on-code-deleted-decrement-ticket-type-ammount';
+import { OnCodeScannedIncrementTicketTypeScannedAmmount } from '@tictac/tictac/src/ticket-types/application/event-handlers/on-code-scanned-increment-ticket-type-scanned-ammount';
 
 import { CodesRepository } from '@tictac/tictac/src/codes/domain/codes-repository';
 import { CodesRepositoryInMemory } from '@tictac/tictac/src/codes/infrastructure/persistence/in-memory/codes-repository-in-memory';
@@ -45,6 +46,7 @@ import { CodeTicketType } from '@tictac/tictac/src/codes/domain/code-ticket-type
 import { CodesByTicketTypesIdsFinder } from '@tictac/tictac/src/codes/application/find-by-ticket-types-ids/codes-by-ticket-types-ids-finder';
 import { BulkCodeCreator } from '@tictac/tictac/src/codes/application/bulk-create/bulk-code-creator';
 import { CodeDeleter } from '@tictac/tictac/src/codes/application/delete/code-deleter';
+import { CodeScanner } from '@tictac/tictac/src/codes/application/scan/code-scanner';
 
 // TODO(pgm): These are for development purposes...
 const events = Array.from({ length: 2 }, () => TicTacEventsMother.random());
@@ -73,6 +75,9 @@ container.bind<QueryBus>(QueryBus).toDynamicValue((ctx) => {
 container.bind<DomainEventSubscriber<DomainEvent>>(DomainEventSubscriber).to(OnTicketTypeEditedUpdateCodesTicketTypes);
 container.bind<DomainEventSubscriber<DomainEvent>>(DomainEventSubscriber).to(OnBulkCodeCreationUpdateTicketTypeAmmount);
 container.bind<DomainEventSubscriber<DomainEvent>>(DomainEventSubscriber).to(OnCodeDeletedDecrementTicketTypeAmmount);
+container
+  .bind<DomainEventSubscriber<DomainEvent>>(DomainEventSubscriber)
+  .to(OnCodeScannedIncrementTicketTypeScannedAmmount);
 
 container.bind<EventBus>(EventBus).toDynamicValue((ctx) => {
   const eventBus = new InMemoryAsyncEventBus();
@@ -102,5 +107,6 @@ container.bind(CodesRepository).toConstantValue(new CodesRepositoryInMemory(code
 container.bind(CodesByTicketTypesIdsFinder).to(CodesByTicketTypesIdsFinder);
 container.bind(BulkCodeCreator).to(BulkCodeCreator);
 container.bind(CodeDeleter).to(CodeDeleter);
+container.bind(CodeScanner).to(CodeScanner);
 
 export { container };
