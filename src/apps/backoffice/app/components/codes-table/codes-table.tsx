@@ -5,6 +5,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { CodePrimitives } from '@tictac/tictac/src/codes/domain/code';
 import { PlusIcon, TrashIcon } from 'lucide-react';
 import { ImportCodesDialog } from '../forms/codes/import-codes-dialog';
+import { DeleteCodeDialog } from '../forms/codes/delete-code-dialog';
 
 export function CodesTable({
   codes,
@@ -45,10 +46,12 @@ export function CodesTable({
                     : 'No escaneado'}
                 </TableCell>
                 <TableCell className="flex items-center gap-2">
-                  <Button disabled={readOnly} variant="outline" size="icon" className="text-red-500">
-                    <TrashIcon className="h-4 w-4" />
-                    <span className="sr-only">Eliminar</span>
-                  </Button>
+                  <DeleteCodeDialog code={code}>
+                    <Button disabled={readOnly} variant="outline" size="icon" className="text-red-500">
+                      <TrashIcon className="h-4 w-4" />
+                      <span className="sr-only">Eliminar</span>
+                    </Button>
+                  </DeleteCodeDialog>
                 </TableCell>
               </TableRow>
             ))}

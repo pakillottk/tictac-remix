@@ -41,7 +41,7 @@ export class BulkCodeCreator {
 
     await this.codesRepository.bulkCreate(codes);
 
-    this.eventBus.publish([
+    await this.eventBus.publish([
       new CodeBulkCreationEvent(
         {
           ammount: codes.length,

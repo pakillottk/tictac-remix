@@ -35,12 +35,16 @@ import { TicketTypeEditor } from '@tictac/tictac/src/ticket-types/application/ed
 import { TicketTypeDeleter } from '@tictac/tictac/src/ticket-types/application/delete/ticket-type-deleter';
 
 import { CodesMother } from '@tictac/tictac/src/codes/infrastructure/testing/codes-mother';
+
 import { OnTicketTypeEditedUpdateCodesTicketTypes } from '@tictac/tictac/src/codes/application/event-handlers/on-ticket-type-edited-update-codes-ticket-types';
+import { OnCodeDeletedDecrementTicketTypeAmmount } from '@tictac/tictac/src/ticket-types/application/event-handlers/on-code-deleted-decrement-ticket-type-ammount';
+
 import { CodesRepository } from '@tictac/tictac/src/codes/domain/codes-repository';
 import { CodesRepositoryInMemory } from '@tictac/tictac/src/codes/infrastructure/persistence/in-memory/codes-repository-in-memory';
 import { CodeTicketType } from '@tictac/tictac/src/codes/domain/code-ticket-type';
 import { CodesByTicketTypesIdsFinder } from '@tictac/tictac/src/codes/application/find-by-ticket-types-ids/codes-by-ticket-types-ids-finder';
 import { BulkCodeCreator } from '@tictac/tictac/src/codes/application/bulk-create/bulk-code-creator';
+import { CodeDeleter } from '@tictac/tictac/src/codes/application/delete/code-deleter';
 
 // TODO(pgm): These are for development purposes...
 const events = Array.from({ length: 2 }, () => TicTacEventsMother.random());
@@ -68,6 +72,7 @@ container.bind<QueryBus>(QueryBus).toDynamicValue((ctx) => {
 // DomainEvents
 container.bind<DomainEventSubscriber<DomainEvent>>(DomainEventSubscriber).to(OnTicketTypeEditedUpdateCodesTicketTypes);
 container.bind<DomainEventSubscriber<DomainEvent>>(DomainEventSubscriber).to(OnBulkCodeCreationUpdateTicketTypeAmmount);
+container.bind<DomainEventSubscriber<DomainEvent>>(DomainEventSubscriber).to(OnCodeDeletedDecrementTicketTypeAmmount);
 
 container.bind<EventBus>(EventBus).toDynamicValue((ctx) => {
   const eventBus = new InMemoryAsyncEventBus();
@@ -96,5 +101,6 @@ container.bind(CodesRepository).toConstantValue(new CodesRepositoryInMemory(code
 
 container.bind(CodesByTicketTypesIdsFinder).to(CodesByTicketTypesIdsFinder);
 container.bind(BulkCodeCreator).to(BulkCodeCreator);
+container.bind(CodeDeleter).to(CodeDeleter);
 
 export { container };

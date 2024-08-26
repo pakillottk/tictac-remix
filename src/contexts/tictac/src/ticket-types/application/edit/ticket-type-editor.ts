@@ -25,6 +25,6 @@ export class TicketTypeEditor {
     const editedTicketType = ticketType.edit(params.name);
     await this.ticketTypeRepository.save(editedTicketType);
 
-    this.eventBus.publish(ticketType.pullDomainEvents());
+    await this.eventBus.publish(ticketType.pullDomainEvents());
   }
 }

@@ -28,6 +28,6 @@ export class TicTacEventCreator {
     );
     await this.tictacEventsRepository.save(tictacEvent);
 
-    this.eventBus.publish(tictacEvent.pullDomainEvents());
+    await this.eventBus.publish(tictacEvent.pullDomainEvents());
   }
 }

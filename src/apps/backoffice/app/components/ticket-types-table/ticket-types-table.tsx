@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { TicketTypePrimitives } from '@tictac/tictac/src/ticket-types/domain/ticket-type';
 import EditTicketTypeDialog from '../forms/ticket-types/edit-ticket-type-dialog';
@@ -56,6 +56,15 @@ export default function TicketTypesTable({
                 </TableRow>
               ))}
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell>{ticketTypes.length} tipos</TableCell>
+                <TableCell colSpan={2}>
+                  {ticketTypes.reduce((acc, ticket) => acc + ticket.scannedAmmount, 0)} /{' '}
+                  {ticketTypes.reduce((acc, ticket) => acc + ticket.ammount, 0)}
+                </TableCell>
+              </TableRow>
+            </TableFooter>
           </Table>
         </CardContent>
         <CardFooter className="justify-end">

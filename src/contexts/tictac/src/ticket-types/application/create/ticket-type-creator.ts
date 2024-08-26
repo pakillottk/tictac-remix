@@ -38,6 +38,6 @@ export class TicketTypeCreator {
     );
     await this.ticketTypesRepository.save(ticketType);
 
-    this.eventBus.publish(ticketType.pullDomainEvents());
+    await this.eventBus.publish(ticketType.pullDomainEvents());
   }
 }

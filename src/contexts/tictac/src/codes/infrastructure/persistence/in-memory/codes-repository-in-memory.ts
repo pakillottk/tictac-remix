@@ -35,7 +35,7 @@ export class CodesRepositoryInMemory extends CodesRepository {
   }
 
   async findByCode(code: TicketCode) {
-    return fromNullable(this.codes.find((c) => c.code.value === code.value));
+    return this.codes.find((c) => c.code.value === code.value) || null;
   }
 
   async findByTicketTypeId(ticketTypeId: TicketTypeId) {
@@ -61,5 +61,12 @@ export class CodesRepositoryInMemory extends CodesRepository {
 
   async findAll() {
     return this.codes;
+  }
+
+  async delete(code: TicketCode): Promise<void> {
+    const idx = this.codes.findIndex((c) => c.code.value === code.value);
+    if (idx !== -1) {
+      this.codes.splice(idx, 1);
+    }
   }
 }

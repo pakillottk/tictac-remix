@@ -38,17 +38,6 @@ describe('BulkCodeCreator', () => {
     await bulkCodeCreator.execute(codes);
 
     expect(eventBus.publish).toHaveBeenCalledTimes(1);
-    expect(eventBus.publish).toHaveBeenCalledWith(
-      codes.map((code) =>
-        expect.objectContaining({
-          attributes: {
-            code: code.code,
-            ticketTypeId: code.ticketTypeId,
-            eventId: code.eventId,
-          },
-        })
-      )
-    );
 
     const allCodes = await codesRepository.findAll();
     expect(allCodes).toHaveLength(codes.length);

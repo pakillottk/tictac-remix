@@ -6,7 +6,7 @@ import { EventId } from '@tictac/tictac/src/kernel/domain/event-id';
 import { CodeTicketType } from '../../domain/code-ticket-type';
 
 export class CodesMother {
-  static random(): Code {
+  static random(scanned: boolean = false): Code {
     return Code.fromPrimitives({
       code: TicketCode.random().value,
       ticketType: {
@@ -14,11 +14,13 @@ export class CodesMother {
         name: faker.commerce.product(),
       },
       eventId: faker.string.uuid(),
-      scannedAt: faker.date.recent(),
-      scannedBy: {
-        id: faker.string.uuid(),
-        name: faker.person.firstName(),
-      },
+      scannedAt: scanned ? faker.date.recent() : null,
+      scannedBy: scanned
+        ? {
+            id: faker.string.uuid(),
+            name: faker.person.firstName(),
+          }
+        : null,
     });
   }
 

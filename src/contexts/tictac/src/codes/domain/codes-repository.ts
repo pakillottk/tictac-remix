@@ -8,7 +8,7 @@ export abstract class CodesRepository {
   abstract bulkCreate(codes: Code[]): Promise<void>;
   abstract bulkUpdate(codes: Code[]): Promise<void>;
 
-  abstract findByCode(code: TicketCode): Promise<Option<Code>>;
+  abstract findByCode(code: TicketCode): Promise<Code | null>;
 
   abstract findByTicketTypeId(ticketTypeId: TicketTypeId): Promise<Code[]>;
   abstract findByTicketTypesIds(
@@ -20,4 +20,6 @@ export abstract class CodesRepository {
   abstract countByTicketTypeId(ticketId: TicketTypeId): Promise<number>;
 
   abstract findAll(): Promise<Code[]>;
+
+  abstract delete(code: TicketCode): Promise<void>;
 }
