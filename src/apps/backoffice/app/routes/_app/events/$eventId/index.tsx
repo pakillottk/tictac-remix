@@ -16,8 +16,10 @@ import assert from 'assert';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ImportCodesDialog } from '~/components/forms/codes/import-codes-dialog';
-import { ImportIcon, PlusIcon } from 'lucide-react';
+import { ImportIcon, PlusIcon, SmartphoneIcon } from 'lucide-react';
 import { url } from 'inspector';
+import { StartScanningEventDialog } from '~/components/forms/events/start-scanning-event-dialog';
+import { StopScanningEventDialog } from '~/components/forms/events/stop-scanning-event-dialog';
 
 const PAGE_LIMIT = 25;
 
@@ -64,15 +66,35 @@ export default function TicTacEventPage() {
 
   return (
     <>
-      <div className="flex flex-col flexflex-wrap space-y-6 relative">
-        <header className="sticky top-16 z-10 bg-background">
-          <h1 className="text-3xl font-bold mb-2">{event.name}</h1>
-          <div className="flex items-center mb-4">
-            <Badge variant={event.scanning ? 'default' : 'secondary'} className="mr-2">
-              {event.scanning ? 'Escaneando' : 'Inactivo'}
-            </Badge>
-            <span className="text-sm text-muted-foreground">Organizado por {event.ownerName}</span>
+      <div className="flex flex-col flex-wrap space-y-6 relative">
+        <header className="sticky top-16 z-10 bg-background flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold mb-2">{event.name}</h1>
+            <div className="flex items-center mb-4">
+              <Badge variant={event.scanning ? 'default' : 'secondary'} className="mr-2">
+                {event.scanning ? 'Escaneando' : 'Inactivo'}
+              </Badge>
+              <span className="text-sm text-muted-foreground">Organizado por {event.ownerName}</span>
+            </div>
           </div>
+
+          {!event.scanning && (
+            <StartScanningEventDialog event={event}>
+              <Button color="primary">
+                <SmartphoneIcon className="mr-2 h-4 w-4" />
+                Escanear
+              </Button>
+            </StartScanningEventDialog>
+          )}
+
+          {event.scanning && (
+            <StopScanningEventDialog event={event}>
+              <Button color="primary">
+                <SmartphoneIcon className="mr-2 h-4 w-4 text-red-500" />
+                Detener
+              </Button>
+            </StopScanningEventDialog>
+          )}
         </header>
 
         {event.eventImage && (

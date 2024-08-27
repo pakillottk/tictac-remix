@@ -15,7 +15,7 @@ export class TicTacEventsMother {
     eventImage: faker.image.url(),
   });
 
-  static random(): TicTacEvent {
+  static random(scanning?: boolean): TicTacEvent {
     return TicTacEvent.fromPrimitives(
       this.buildEvent({
         eventId: faker.string.uuid(),
@@ -23,7 +23,7 @@ export class TicTacEventsMother {
         description: faker.lorem.paragraph(),
         eventLocation: faker.location.streetAddress(),
         eventDate: faker.date.recent(),
-        scanning: faker.datatype.boolean(),
+        scanning: scanning ?? faker.datatype.boolean(),
         ownerId: faker.string.uuid(),
         ownerName: faker.company.name(),
         eventImage: faker.image.url(),

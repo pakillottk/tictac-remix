@@ -11,7 +11,12 @@ export class TicTacEventsRepositoryInMemory extends TicTacEventsRepository {
   }
 
   async save(event: TicTacEvent) {
-    this.events.push(event);
+    const idx = this.events.findIndex((e) => e.eventId.value === event.eventId.value);
+    if (idx === -1) {
+      this.events.push(event);
+    } else {
+      this.events[idx] = event;
+    }
   }
 
   async find(eventId: EventId) {

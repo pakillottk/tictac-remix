@@ -13,13 +13,18 @@ import { InMemoryAsyncEventBus } from '@tictac/kernel/src/infrastructure/event-b
 import { DomainEventSubscriber } from '@tictac/kernel/src/domain/domain-event-subscriber';
 import { DomainEvent } from '@tictac/kernel/src/domain/domain-event';
 
+import { TicTacEventsMother } from '@tictac/tictac/src/events/infrastructure/testing/tictac-events-mother';
+
 import { TicTacEventsRepository } from '@tictac/tictac/src/events/domain/tictac-events-repository';
 import { TicTacEventsRepositoryInMemory } from '@tictac/tictac/src/events/infrastructure/persistence/in-memory/tictac-events-repository-in-memory';
+
+import { EventBasicInfoQueryHandler } from '@tictac/tictac/src/events/application/query-handlers/event-basic-info-query-handler';
+
 import { TicTacEventsAllSearcher } from '@tictac/tictac/src/events/application/search-all/tictac-events-all-searcher';
-import { TicTacEventsMother } from '@tictac/tictac/src/events/infrastructure/testing/tictac-events-mother';
 import { TictacEventFinder } from '@tictac/tictac/src/events/application/find/tictac-event-finder';
 import { TicTacEventCreator } from '@tictac/tictac/src/events/application/create/tictac-event-creator';
-import { EventBasicInfoQueryHandler } from '@tictac/tictac/src/events/application/query-handlers/event-basic-info-query-handler';
+import { TicTacEventScanningStarter } from '@tictac/tictac/src/events/application/start-scanning/tictac-event-scanning-starter';
+import { TicTacEventScanningStopper } from '@tictac/tictac/src/events/application/stop-scanning/tictac-event-scanning-stopper';
 
 import { TicketTypesMother } from '@tictac/tictac/src/ticket-types/infrastructure/testing/ticket-types-mother';
 
@@ -29,6 +34,7 @@ import { CodeCountByTicketIdQueryHandler } from '@tictac/tictac/src/codes/applic
 
 import { TicketTypesRepository } from '@tictac/tictac/src/ticket-types/domain/ticket-types-repository';
 import { TicketTypesRepositoryInMemory } from '@tictac/tictac/src/ticket-types/infrastructure/persistence/in-memory/ticket-types-repository-in-memory';
+
 import { TicketTypesByEventFinder } from '@tictac/tictac/src/ticket-types/application/find-by-event/ticket-types-by-event-finder';
 import { TicketTypeCreator } from '@tictac/tictac/src/ticket-types/application/create/ticket-type-creator';
 import { TicketTypeEditor } from '@tictac/tictac/src/ticket-types/application/edit/ticket-type-editor';
@@ -79,7 +85,7 @@ container
   .bind<DomainEventSubscriber<DomainEvent>>(DomainEventSubscriber)
   .to(OnCodeScannedIncrementTicketTypeScannedAmmount);
 
-container.bind<EventBus>(EventBus).toDynamicValue((ctx) => {
+container.bind(EventBus).toDynamicValue((ctx) => {
   const eventBus = new InMemoryAsyncEventBus();
   const subscribers = ctx.container.getAll<DomainEventSubscriber<DomainEvent>>(DomainEventSubscriber);
   eventBus.addSubscribers(subscribers);
@@ -89,9 +95,11 @@ container.bind<EventBus>(EventBus).toDynamicValue((ctx) => {
 // TicTacEvents
 container.bind(TicTacEventsRepository).toConstantValue(new TicTacEventsRepositoryInMemory(events));
 
-container.bind<TicTacEventsAllSearcher>(TicTacEventsAllSearcher).to(TicTacEventsAllSearcher);
-container.bind<TictacEventFinder>(TictacEventFinder).to(TictacEventFinder);
-container.bind<TicTacEventCreator>(TicTacEventCreator).to(TicTacEventCreator);
+container.bind(TicTacEventsAllSearcher).to(TicTacEventsAllSearcher);
+container.bind(TictacEventFinder).to(TictacEventFinder);
+container.bind(TicTacEventCreator).to(TicTacEventCreator);
+container.bind(TicTacEventScanningStarter).to(TicTacEventScanningStarter);
+container.bind(TicTacEventScanningStopper).to(TicTacEventScanningStopper);
 
 // TicketTypes
 container.bind(TicketTypesRepository).toConstantValue(new TicketTypesRepositoryInMemory(ticketTypes));

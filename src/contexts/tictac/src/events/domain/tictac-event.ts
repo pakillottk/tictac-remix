@@ -2,6 +2,8 @@ import { AggregateRoot } from '@tictac/kernel/src/domain/aggregate-root';
 import { Option } from '@tictac/kernel/src/domain/option';
 import { TicTacEventCreatedEvent } from '../../kernel/domain/events/tictac-event-created-event';
 import { EventId } from '../../kernel/domain/event-id';
+import { TictacEventScanningStartedEvent } from '../../kernel/domain/events/tictac-event-scanning-started-event';
+import { TictacEventScanningStoppedEvent } from '../../kernel/domain/events/tictac-event-scanning-stopped-event';
 
 export interface TicTacEventPrimitives {
   eventId: string;
@@ -84,5 +86,57 @@ export class TicTacEvent extends AggregateRoot {
       ownerName: this.ownerName,
       eventImage: this.eventImage.toNullable(),
     };
+  }
+
+  public startScanning(): TicTacEvent {
+    const scanningEvent = new TicTacEvent(
+      this.eventId,
+      this.name,
+      this.description,
+      this.eventLocation,
+      this.eventDate,
+      true,
+      this.ownerId,
+      this.ownerName,
+      this.eventImage
+    );
+
+    scanningEvent.record(
+      new TictacEventScanningStartedEvent(
+        {
+          eventId: this.eventId.value,
+          name: this.name,
+        },
+        this.eventId.value
+      )
+    );
+
+    return scanningEvent;
+  }
+
+  public stopScanning(): TicTacEvent {
+    const scanningEvent = new TicTacEvent(
+      this.eventId,
+      this.name,
+      this.description,
+      this.eventLocation,
+      this.eventDate,
+      false,
+      this.ownerId,
+      this.ownerName,
+      this.eventImage
+    );
+
+    scanningEvent.record(
+      new TictacEventScanningStoppedEvent(
+        {
+          eventId: this.eventId.value,
+          name: this.name,
+        },
+        this.eventId.value
+      )
+    );
+
+    return scanningEvent;
   }
 }
