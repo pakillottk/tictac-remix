@@ -6,7 +6,6 @@ import { CodeScanner } from './code-scanner';
 import { Code } from '../../domain/code';
 import { CodesRepositoryInMemory } from '../../infrastructure/persistence/in-memory/codes-repository-in-memory';
 import { CodesMother } from '../../infrastructure/testing/codes-mother';
-import { toNullable } from 'fp-ts/lib/Option';
 import { QueryBus } from '@tictac/kernel/src/domain/query-bus';
 
 // FIXME(pgm) Jest cant load nanoid correctly...
@@ -46,7 +45,7 @@ describe('CodeScanner', () => {
     const scannedCode = await codesRepository.findByCode(code.code);
     expect(scannedCode?.isScanned).toBe(true);
 
-    const scannedCodeScannedBy = toNullable(scannedCode!.scannedBy);
+    const scannedCodeScannedBy = scannedCode!.scannedBy.toNullable();
     expect(scannedCodeScannedBy?.id).toBe(scannedBy.id);
     expect(scannedCodeScannedBy?.name).toBe(scannedBy.name);
 

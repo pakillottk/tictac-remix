@@ -1,6 +1,5 @@
 import { TicketTypeId } from '../../kernel/domain/ticket-type-id';
 import { Code } from './code';
-import { Option } from 'fp-ts/lib/Option';
 import { TicketCode } from './ticket-code';
 
 export abstract class CodesRepository {

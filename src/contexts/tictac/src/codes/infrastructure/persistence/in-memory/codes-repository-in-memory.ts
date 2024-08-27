@@ -1,5 +1,3 @@
-import { fromNullable } from 'fp-ts/lib/Option';
-
 import { TicketTypeId } from '@tictac/tictac/src/kernel/domain/ticket-type-id';
 import { Code } from '../../../domain/code';
 import { CodesRepository } from '../../../domain/codes-repository';

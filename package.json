@@ -34,7 +34,6 @@
     "src/contexts/tictac"
   ],
   "dependencies": {
-    "fp-ts": "^2.16.9",
     "inversify": "^6.0.2"
   }
 }

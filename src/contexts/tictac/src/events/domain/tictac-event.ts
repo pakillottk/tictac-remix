@@ -1,5 +1,5 @@
 import { AggregateRoot } from '@tictac/kernel/src/domain/aggregate-root';
-import { Option, fromNullable, toNullable } from 'fp-ts/Option';
+import { Option } from '@tictac/kernel/src/domain/option';
 import { TicTacEventCreatedEvent } from '../../kernel/domain/events/tictac-event-created-event';
 import { EventId } from '../../kernel/domain/event-id';
 
@@ -68,7 +68,7 @@ export class TicTacEvent extends AggregateRoot {
       primitives.scanning,
       primitives.ownerId,
       primitives.ownerName,
-      fromNullable(primitives.eventImage)
+      Option.fromNullable(primitives.eventImage)
     );
   }
 
@@ -82,7 +82,7 @@ export class TicTacEvent extends AggregateRoot {
       scanning: this.scanning,
       ownerId: this.ownerId,
       ownerName: this.ownerName,
-      eventImage: toNullable(this.eventImage),
+      eventImage: this.eventImage.toNullable(),
     };
   }
 }

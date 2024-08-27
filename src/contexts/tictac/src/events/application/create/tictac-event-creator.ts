@@ -1,8 +1,9 @@
 import { inject, injectable } from 'inversify';
+
+import { Option } from '@tictac/kernel/src/domain/option';
 import { TicTacEventsRepository } from '../../domain/tictac-events-repository';
 import { TicTacEvent, TicTacEventPrimitives } from '../../domain/tictac-event';
 import { EventBus } from '@tictac/kernel/src/domain/event-bus';
-import { fromNullable } from 'fp-ts/lib/Option';
 import { EventId } from '@tictac/tictac/src/kernel/domain/event-id';
 
 export type TicTacEventCreatorParams = TicTacEventPrimitives;
@@ -24,7 +25,7 @@ export class TicTacEventCreator {
       params.scanning,
       params.ownerId,
       params.ownerName,
-      fromNullable(params.eventImage)
+      Option.fromNullable(params.eventImage)
     );
     await this.tictacEventsRepository.save(tictacEvent);
 

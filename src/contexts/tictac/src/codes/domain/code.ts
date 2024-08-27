@@ -1,9 +1,8 @@
 import { AggregateRoot } from '@tictac/kernel/src/domain/aggregate-root';
-import { Option, fromNullable, isSome, match, none, some, toNullable } from 'fp-ts/lib/Option';
+import { Option } from '@tictac/kernel/src/domain/option';
 import { TicketCode } from './ticket-code';
 import { EventId } from '../../kernel/domain/event-id';
 import { CodeScannedBy } from './code-scanned-by';
-import { pipe } from 'fp-ts/lib/function';
 import { CodeTicketType } from './code-ticket-type';
 import { CodeCreatedEvent } from '@tictac/tictac/src/kernel/domain/events/code-created-event';
 import { CodeDeletedEvent } from '../../kernel/domain/events/code-deleted-event';
@@ -29,8 +28,8 @@ export class Code extends AggregateRoot {
       new TicketCode(primitives.code),
       CodeTicketType.fromPrimitives(primitives.ticketType),
       new EventId(primitives.eventId),
-      fromNullable(primitives.scannedAt),
-      primitives.scannedBy ? some(CodeScannedBy.fromPrimitives(primitives.scannedBy)) : none
+      Option.fromNullable(primitives.scannedAt),
+      primitives.scannedBy ? Option.some(CodeScannedBy.fromPrimitives(primitives.scannedBy)) : Option.none()
     );
   }
 
@@ -45,11 +44,11 @@ export class Code extends AggregateRoot {
   }
 
   get isScanned(): boolean {
-    return isSome(this.scannedAt);
+    return this.scannedAt.isSome();
   }
 
   static create(code: TicketCode, ticketType: CodeTicketType, eventId: EventId): Code {
-    const newCode = new Code(code, ticketType, eventId, none, none);
+    const newCode = new Code(code, ticketType, eventId, Option.none(), Option.none());
     newCode.record(
       new CodeCreatedEvent({ code: code.value, ticketTypeId: ticketType.id.value, eventId: eventId.value }, code.value)
     );
@@ -76,7 +75,13 @@ export class Code extends AggregateRoot {
       throw new Error('Code already scanned');
     }
 
-    const updatedCode = new Code(this.code, this.ticketType, this.eventId, some(new Date()), some(scannedBy));
+    const updatedCode = new Code(
+      this.code,
+      this.ticketType,
+      this.eventId,
+      Option.some(new Date()),
+      Option.some(scannedBy)
+    );
     updatedCode.record(
       new CodeScannedEvent(
         {
@@ -97,13 +102,10 @@ export class Code extends AggregateRoot {
       code: this.code.value,
       ticketType: this.ticketType.toPrimitives(),
       eventId: this.eventId.value,
-      scannedAt: toNullable(this.scannedAt),
-      scannedBy: pipe(
-        this.scannedBy,
-        match(
-          () => null,
-          (scannedBy) => scannedBy.toPrimitives()
-        )
+      scannedAt: this.scannedAt.toNullable(),
+      scannedBy: this.scannedBy.match(
+        (scannedBy) => scannedBy.toPrimitives(),
+        () => null
       ),
     };
   }
