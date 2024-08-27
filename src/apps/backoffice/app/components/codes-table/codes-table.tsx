@@ -49,7 +49,7 @@ export function CodesTable({
                   </TableCell>
                   <TableCell className="flex items-center gap-2">
                     <ScanCodeDialog code={code}>
-                      <Button disabled={!readOnly || code.scannedAt} variant="outline" size="icon">
+                      <Button disabled={!readOnly || code.scannedAt != null} variant="outline" size="icon">
                         <CheckCircleIcon className="h-4 w-4" />
                         <span className="sr-only">Escanear</span>
                       </Button>
