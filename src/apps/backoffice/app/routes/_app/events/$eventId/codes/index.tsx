@@ -2,10 +2,11 @@ import { ActionFunctionArgs, json } from '@remix-run/node';
 
 import { TicketTypesByEventFinder } from '@tictac/tictac/src/ticket-types/application/find-by-event/ticket-types-by-event-finder';
 
-import { container } from '~/container';
-import assert from 'assert';
 import { TicketTypeCreator } from '@tictac/tictac/src/ticket-types/application/create/ticket-type-creator';
 import { BulkCodeCreator } from '@tictac/tictac/src/codes/application/bulk-create/bulk-code-creator';
+
+import { container } from '~/container';
+import assert from 'assert';
 
 export async function action({ request, params }: ActionFunctionArgs) {
   if (request.method !== 'POST') {

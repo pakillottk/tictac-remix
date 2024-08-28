@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 import { useFetcher, useLocation } from '@remix-run/react';
 
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';

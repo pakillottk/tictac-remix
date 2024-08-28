@@ -1,9 +1,12 @@
 import { ActionFunctionArgs, json } from '@remix-run/node';
+
+import { EditTicketTypeFormDtoSchema } from '~/components/forms/ticket-types/edit-ticket-type-form';
+
 import { TicketTypeDeleter } from '@tictac/tictac/src/ticket-types/application/delete/ticket-type-deleter';
 import { TicketTypeEditor } from '@tictac/tictac/src/ticket-types/application/edit/ticket-type-editor';
-import assert from 'assert';
-import { EditTicketTypeFormDtoSchema } from '~/components/forms/ticket-types/edit-ticket-type-form';
+
 import { container } from '~/container';
+import assert from 'assert';
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const { ticketTypeId } = params;

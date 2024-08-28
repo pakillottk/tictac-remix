@@ -1,6 +1,6 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { TicTacEventPrimitives } from '@tictac/tictac/src/events/domain/tictac-event';
-import { CalendarIcon, ClockIcon, MapPinIcon } from 'lucide-react';
+import { CalendarIcon, MapPinIcon } from 'lucide-react';
 
 export function EventDetails({ event }: { event: TicTacEventPrimitives }) {
   return (

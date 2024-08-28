@@ -1,11 +1,17 @@
 import { json, LoaderFunctionArgs } from '@remix-run/node';
-import { Link, MetaFunction, useLoaderData, useLocation, useSearchParams } from '@remix-run/react';
+import { Link, MetaFunction, useLoaderData, useSearchParams } from '@remix-run/react';
 
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ImportIcon, SmartphoneIcon } from 'lucide-react';
 
 import TicketTypesTable from '~/components/ticket-types-table/ticket-types-table';
 import { CodesTable } from '~/components/codes-table/codes-table';
 import { EventDetails } from '~/components/event-details/event-details';
+import { ImportCodesDialog } from '~/components/forms/codes/import-codes-dialog';
+import { StartScanningEventDialog } from '~/components/forms/events/start-scanning-event-dialog';
+import { StopScanningEventDialog } from '~/components/forms/events/stop-scanning-event-dialog';
 
 import { TictacEventFinder } from '@tictac/tictac/src/events/application/find/tictac-event-finder';
 import { TicketTypesByEventFinder } from '@tictac/tictac/src/ticket-types/application/find-by-event/ticket-types-by-event-finder';
@@ -13,13 +19,6 @@ import { CodesByTicketTypesIdsFinder } from '@tictac/tictac/src/codes/applicatio
 
 import { container } from '~/container';
 import assert from 'assert';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ImportCodesDialog } from '~/components/forms/codes/import-codes-dialog';
-import { ImportIcon, PlusIcon, SmartphoneIcon } from 'lucide-react';
-import { url } from 'inspector';
-import { StartScanningEventDialog } from '~/components/forms/events/start-scanning-event-dialog';
-import { StopScanningEventDialog } from '~/components/forms/events/stop-scanning-event-dialog';
 
 const PAGE_LIMIT = 25;
 

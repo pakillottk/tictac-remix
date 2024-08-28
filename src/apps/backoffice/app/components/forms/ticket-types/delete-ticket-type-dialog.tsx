@@ -1,3 +1,5 @@
+import { useFetcher } from '@remix-run/react';
+
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -9,7 +11,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { useFetcher } from '@remix-run/react';
+
 import { TicketTypePrimitives } from '@tictac/tictac/src/ticket-types/domain/ticket-type';
 
 export function DeleteTicketTypeDialog({

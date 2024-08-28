@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import {
   Dialog,
   DialogContent,
@@ -8,6 +9,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import EditTicketTypeForm from './edit-ticket-type-form';
+
 import { TicketTypePrimitives } from '@tictac/tictac/src/ticket-types/domain/ticket-type';
 
 export default function EditTicketTypeDialog({

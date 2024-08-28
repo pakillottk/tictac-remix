@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 import { useFetcher, useLocation } from '@remix-run/react';
 
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -9,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { TicTacEventPrimitives } from '@tictac/tictac/src/events/domain/tictac-event';
+
 import { TicketTypePrimitives } from '@tictac/tictac/src/ticket-types/domain/ticket-type';
 
 export const EditTicketTypeFormDtoSchema = z.object({

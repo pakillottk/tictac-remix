@@ -1,4 +1,5 @@
 import { ActionFunctionArgs, json } from '@remix-run/node';
+
 import { CodeScanner } from '@tictac/tictac/src/codes/application/scan/code-scanner';
 
 import { container } from '~/container';

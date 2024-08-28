@@ -1,3 +1,5 @@
+import { useFetcher } from '@remix-run/react';
+
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -9,7 +11,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { useFetcher } from '@remix-run/react';
+
 import { CodePrimitives } from '@tictac/tictac/src/codes/domain/code';
 
 export function DeleteCodeDialog({ code, children }: { code: CodePrimitives; children: React.ReactNode }) {

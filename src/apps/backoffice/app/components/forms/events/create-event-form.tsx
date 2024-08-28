@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+import { useFetcher } from '@remix-run/react';
 import { format } from 'date-fns';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,14 +10,12 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { MapInput } from '@/components/ui/map-input';
 import { CalendarIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
 import { z } from 'zod';
-import { useFetcher } from '@remix-run/react';
-import { useRef } from 'react';
-import { MapInput } from '@/components/ui/map-input';
 
 export const CreateEventFormDtoSchema = z.object({
   name: z.string().min(2, {

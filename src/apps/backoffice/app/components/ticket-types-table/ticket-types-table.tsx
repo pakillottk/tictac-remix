@@ -1,12 +1,13 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { TicketTypePrimitives } from '@tictac/tictac/src/ticket-types/domain/ticket-type';
-import EditTicketTypeDialog from '../forms/ticket-types/edit-ticket-type-dialog';
 import { Button } from '@/components/ui/button';
-import { DeleteTicketTypeDialog } from '../forms/ticket-types/delete-ticket-type-dialog';
-import CreateTicketTypeDialog from '../forms/ticket-types/create-ticket-type-dialog';
 import { FilePenIcon, PlusIcon, TrashIcon } from 'lucide-react';
+
+import { DeleteTicketTypeDialog } from '../forms/ticket-types/delete-ticket-type-dialog';
+import EditTicketTypeDialog from '../forms/ticket-types/edit-ticket-type-dialog';
+import CreateTicketTypeDialog from '../forms/ticket-types/create-ticket-type-dialog';
+
+import { TicketTypePrimitives } from '@tictac/tictac/src/ticket-types/domain/ticket-type';
 
 export default function TicketTypesTable({
   ticketTypes,

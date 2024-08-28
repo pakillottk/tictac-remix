@@ -13,6 +13,7 @@ import { InMemoryAsyncEventBus } from '@tictac/kernel/src/infrastructure/event-b
 import { DomainEventSubscriber } from '@tictac/kernel/src/domain/domain-event-subscriber';
 import { DomainEvent } from '@tictac/kernel/src/domain/domain-event';
 
+// TicTacEvents
 import { TicTacEventsMother } from '@tictac/tictac/src/events/infrastructure/testing/tictac-events-mother';
 
 import { TicTacEventsRepository } from '@tictac/tictac/src/events/domain/tictac-events-repository';
@@ -26,6 +27,7 @@ import { TicTacEventCreator } from '@tictac/tictac/src/events/application/create
 import { TicTacEventScanningStarter } from '@tictac/tictac/src/events/application/start-scanning/tictac-event-scanning-starter';
 import { TicTacEventScanningStopper } from '@tictac/tictac/src/events/application/stop-scanning/tictac-event-scanning-stopper';
 
+// TicketTypes
 import { TicketTypesMother } from '@tictac/tictac/src/ticket-types/infrastructure/testing/ticket-types-mother';
 
 import { OnBulkCodeCreationUpdateTicketTypeAmmount } from '@tictac/tictac/src/ticket-types/application/event-handlers/on-bulk-code-creation-update-ticket-type-ammount';
@@ -40,6 +42,7 @@ import { TicketTypeCreator } from '@tictac/tictac/src/ticket-types/application/c
 import { TicketTypeEditor } from '@tictac/tictac/src/ticket-types/application/edit/ticket-type-editor';
 import { TicketTypeDeleter } from '@tictac/tictac/src/ticket-types/application/delete/ticket-type-deleter';
 
+// Codes
 import { CodesMother } from '@tictac/tictac/src/codes/infrastructure/testing/codes-mother';
 
 import { OnTicketTypeEditedUpdateCodesTicketTypes } from '@tictac/tictac/src/codes/application/event-handlers/on-ticket-type-edited-update-codes-ticket-types';

@@ -1,14 +1,18 @@
-import { container } from '~/container';
-import assert from 'assert';
 import { json, Link, useLoaderData } from '@remix-run/react';
-import { EventCard } from '~/components/event-card/event-card';
-import { TicTacEventsAllSearcher } from '@tictac/tictac/src/events/application/search-all/tictac-events-all-searcher';
-import CreateEventDialog from '~/components/forms/events/create-event-dialog';
 import { ActionFunctionArgs } from '@remix-run/node';
-import { TicTacEventCreator } from '@tictac/tictac/src/events/application/create/tictac-event-creator';
-import { CreateEventFormDtoSchema } from '~/components/forms/events/create-event-form';
+
+import { EventCard } from '~/components/event-card/event-card';
 import { Button } from '@/components/ui/button';
 import { PlusIcon } from 'lucide-react';
+
+import { CreateEventFormDtoSchema } from '~/components/forms/events/create-event-form';
+import CreateEventDialog from '~/components/forms/events/create-event-dialog';
+
+import { TicTacEventsAllSearcher } from '@tictac/tictac/src/events/application/search-all/tictac-events-all-searcher';
+import { TicTacEventCreator } from '@tictac/tictac/src/events/application/create/tictac-event-creator';
+
+import { container } from '~/container';
+import assert from 'assert';
 
 export async function loader() {
   const searcher = container.get<TicTacEventsAllSearcher>(TicTacEventsAllSearcher);

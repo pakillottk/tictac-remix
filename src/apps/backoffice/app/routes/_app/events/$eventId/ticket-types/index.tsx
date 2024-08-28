@@ -1,9 +1,6 @@
 import { ActionFunctionArgs, json } from '@remix-run/node';
 
-import {
-  CreateTicketTypeFormDtoSchema,
-  CreateTicketTypeFormDto,
-} from '~/components/forms/ticket-types/create-ticket-type-form';
+import { CreateTicketTypeFormDtoSchema } from '~/components/forms/ticket-types/create-ticket-type-form';
 
 import { container } from '~/container';
 import { TicketTypeCreator } from '@tictac/tictac/src/ticket-types/application/create/ticket-type-creator';

@@ -1,10 +1,9 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { CodePrimitives } from '@tictac/tictac/src/codes/domain/code';
-import { CheckCircleIcon, PhoneIcon, PlusIcon, SmartphoneIcon, TrashIcon } from 'lucide-react';
-import { ImportCodesDialog } from '../forms/codes/import-codes-dialog';
+import { CheckCircleIcon, TrashIcon } from 'lucide-react';
+
 import { DeleteCodeDialog } from '../forms/codes/delete-code-dialog';
 import { ScanCodeDialog } from '../forms/codes/scan-code-dialog';
 

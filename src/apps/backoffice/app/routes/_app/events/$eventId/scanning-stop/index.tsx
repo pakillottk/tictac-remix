@@ -1,4 +1,5 @@
 import { json, LoaderFunctionArgs } from '@remix-run/node';
+
 import { TicTacEventScanningStopper } from '@tictac/tictac/src/events/application/stop-scanning/tictac-event-scanning-stopper';
 
 import { container } from '~/container';
