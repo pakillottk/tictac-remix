@@ -17,14 +17,14 @@ export function EventDetails({ event }: { event: TicTacEventPrimitives }) {
             <span>{event.eventLocation}</span>
           </div>
 
-          <iframe
+          {/* <iframe
             src={`https://maps.google.com/maps?q=${event.eventLocation}&output=embed`}
             width="100%"
             height="300"
             style={{ border: 0 }}
             allowFullScreen
             loading="lazy"
-          />
+          /> */}
         </div>
       </CardContent>
     </Card>

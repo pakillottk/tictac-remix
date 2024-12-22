@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { Container } from 'inversify';
 
 import { QueryHandler } from '@tictac/kernel/src/domain/query-handler';
@@ -22,6 +23,7 @@ import { TicTacEventsRepositoryInMemory } from '@tictac/tictac/src/events/infras
 import { EventBasicInfoQueryHandler } from '@tictac/tictac/src/events/application/query-handlers/event-basic-info-query-handler';
 
 import { TicTacEventsAllSearcher } from '@tictac/tictac/src/events/application/search-all/tictac-events-all-searcher';
+import { TicTacEventsSearchAllController } from '@tictac/tictac/src/events/infrastructure/http/controllers/tictac-events-search-all-controller';
 import { TictacEventFinder } from '@tictac/tictac/src/events/application/find/tictac-event-finder';
 import { TicTacEventCreator } from '@tictac/tictac/src/events/application/create/tictac-event-creator';
 import { TicTacEventScanningStarter } from '@tictac/tictac/src/events/application/start-scanning/tictac-event-scanning-starter';
@@ -56,6 +58,7 @@ import { CodesByTicketTypesIdsFinder } from '@tictac/tictac/src/codes/applicatio
 import { BulkCodeCreator } from '@tictac/tictac/src/codes/application/bulk-create/bulk-code-creator';
 import { CodeDeleter } from '@tictac/tictac/src/codes/application/delete/code-deleter';
 import { CodeScanner } from '@tictac/tictac/src/codes/application/scan/code-scanner';
+import { TicTacEventsCreateController } from '@tictac/tictac/src/events/infrastructure/http/controllers/tictac-events-create-controller';
 
 // TODO(pgm): These are for development purposes...
 const events = Array.from({ length: 2 }, () => TicTacEventsMother.random());
@@ -99,8 +102,10 @@ container.bind(EventBus).toDynamicValue((ctx) => {
 container.bind(TicTacEventsRepository).toConstantValue(new TicTacEventsRepositoryInMemory(events));
 
 container.bind(TicTacEventsAllSearcher).to(TicTacEventsAllSearcher);
+container.bind(TicTacEventsSearchAllController).to(TicTacEventsSearchAllController);
 container.bind(TictacEventFinder).to(TictacEventFinder);
 container.bind(TicTacEventCreator).to(TicTacEventCreator);
+container.bind(TicTacEventsCreateController).to(TicTacEventsCreateController);
 container.bind(TicTacEventScanningStarter).to(TicTacEventScanningStarter);
 container.bind(TicTacEventScanningStopper).to(TicTacEventScanningStopper);
 

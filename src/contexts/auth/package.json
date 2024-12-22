@@ -1,19 +1,14 @@
 {
-  "name": "@tictac/kernel",
+  "name": "@tictac/auth",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc --build tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Francisco Gázquez",
   "license": "ISC",
   "dependencies": {
-    "inversify": "^6.0.2",
-    "uuid": "^10.0.0"
-  },
-  "devDependencies": {
-    "@types/uuid": "^10.0.0"
+    "inversify": "^6.0.2"
   }
 }

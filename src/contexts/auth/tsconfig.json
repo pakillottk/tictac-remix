@@ -7,8 +7,12 @@
     "outDir": "dist",
     "types": ["jest", "reflect-metadata"],
     "paths": {
-      "@tictac/*": ["./src/contexts/*"]
+      "@tictac/*": ["./contexts/*"]
     }
   },
-  "references": []
+  "references": [
+    {
+      "path": "../kernel"
+    }
+  ]
 }

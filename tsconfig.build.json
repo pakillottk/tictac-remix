@@ -8,6 +8,9 @@
       "path": "src/contexts/kernel"
     },
     {
+      "path": "src/contexts/auth"
+    },
+    {
       "path": "src/contexts/tictac"
     }
   ]

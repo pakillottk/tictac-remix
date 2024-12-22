@@ -66,7 +66,7 @@ export default function TicTacEventPage() {
   return (
     <>
       <div className="flex flex-col flex-wrap space-y-6 relative">
-        <header className="sticky top-16 z-10 bg-background flex justify-between items-center">
+        <header className="sticky top-16 z-10 bg-background flex flex-wrap justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2">{event.name}</h1>
             <div className="flex items-center mb-4">

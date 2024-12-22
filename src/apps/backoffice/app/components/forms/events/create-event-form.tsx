@@ -15,33 +15,23 @@ import { CalendarIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
-import { z } from 'zod';
-
-export const CreateEventFormDtoSchema = z.object({
-  name: z.string().min(2, {
-    message: 'El nombre del evento debe tener al menos 2 caracteres.',
-  }),
-  location: z.string().min(2, {
-    message: 'La localización del evento debe tener al menos 2 caracteres.',
-  }),
-  date: z.date().default(new Date()),
-  image: z.string(),
-  scanning: z.boolean().default(false),
-});
-export type CreateEventFormDto = z.infer<typeof CreateEventFormDtoSchema>;
+import {
+  CreateEventFormDtoSchema,
+  CreateEventFormInputDto,
+} from '@tictac/tictac/src/events/infrastructure/http/controllers/tictac-events-create-controller';
 
 const formSchema = CreateEventFormDtoSchema;
 
 export function CreateEventForm({
   onFormSubmitted,
 }: {
-  onFormSubmitted?: (values?: CreateEventFormDto | null) => void;
+  onFormSubmitted?: (values?: CreateEventFormInputDto | null) => void;
 }) {
   const fetcher = useFetcher();
 
   const formRef = useRef(null);
 
-  const form = useForm<CreateEventFormDto>({
+  const form = useForm<CreateEventFormInputDto>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
@@ -52,7 +42,7 @@ export function CreateEventForm({
     },
   });
 
-  async function onSubmit(values: CreateEventFormDto) {
+  async function onSubmit(values: CreateEventFormInputDto) {
     try {
       fetcher.submit(formRef.current, {
         method: 'POST',
@@ -128,7 +118,8 @@ export function CreateEventForm({
               <FormItem>
                 <FormLabel>Localidad</FormLabel>
                 <FormControl>
-                  <MapInput placeholder="C/Calle, Numero - Ciudad (Provincia)" {...field} />
+                  <Input placeholder="C/Calle, Numero - Ciudad (Provincia)" {...field} />
+                  {/* <MapInput placeholder="C/Calle, Numero - Ciudad (Provincia)" {...field} /> */}
                 </FormControl>
                 <FormMessage />
               </FormItem>

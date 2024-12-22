@@ -31,7 +31,8 @@
   "workspaces": [
     "src/apps/backoffice",
     "src/contexts/kernel",
-    "src/contexts/tictac"
+    "src/contexts/tictac",
+    "src/contexts/auth"
   ],
   "dependencies": {
     "inversify": "^6.0.2"

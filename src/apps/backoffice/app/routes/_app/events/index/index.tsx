@@ -1,24 +1,29 @@
 import { json, Link, useLoaderData } from '@remix-run/react';
-import { ActionFunctionArgs } from '@remix-run/node';
+import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import { remixRequestHandler } from '@/lib/remix-request-handler';
 
 import { EventCard } from '~/components/event-card/event-card';
 import { Button } from '@/components/ui/button';
 import { PlusIcon } from 'lucide-react';
 
-import { CreateEventFormDtoSchema } from '~/components/forms/events/create-event-form';
 import CreateEventDialog from '~/components/forms/events/create-event-dialog';
+import {
+  TicTacEventsSearchAllController,
+  TicTacEventsSearchAllControllerOutputDto,
+} from '@tictac/tictac/src/events/infrastructure/http/controllers/tictac-events-search-all-controller';
 
-import { TicTacEventsAllSearcher } from '@tictac/tictac/src/events/application/search-all/tictac-events-all-searcher';
-import { TicTacEventCreator } from '@tictac/tictac/src/events/application/create/tictac-event-creator';
+import {
+  CreateEventResponseDto,
+  TicTacEventsCreateController,
+} from '@tictac/tictac/src/events/infrastructure/http/controllers/tictac-events-create-controller';
 
-import { container } from '~/container';
-import assert from 'assert';
+export async function loader({ request }: LoaderFunctionArgs) {
+  const response = await remixRequestHandler<TicTacEventsSearchAllController, TicTacEventsSearchAllControllerOutputDto>(
+    TicTacEventsSearchAllController,
+    request
+  );
 
-export async function loader() {
-  const searcher = container.get<TicTacEventsAllSearcher>(TicTacEventsAllSearcher);
-  assert(!!searcher);
-  const events = await searcher.execute();
-  return json({ events });
+  return response.body;
 }
 
 export default function Events() {
@@ -51,27 +56,11 @@ export default function Events() {
   );
 }
 
-export async function action({ request, params }: ActionFunctionArgs) {
-  if (request.method !== 'POST') {
-    return json({ message: 'Method not allowed' }, { status: 405 });
-  }
+export async function action({ request }: ActionFunctionArgs) {
+  const response = await remixRequestHandler<TicTacEventsCreateController, CreateEventResponseDto>(
+    TicTacEventsCreateController,
+    request
+  );
 
-  const eventCreator = container.get<TicTacEventCreator>(TicTacEventCreator);
-  assert(!!eventCreator);
-
-  const body = await request.formData();
-  const payload = CreateEventFormDtoSchema.parse(Object.fromEntries(body.entries()));
-
-  await eventCreator.execute({
-    ...payload,
-    eventId: crypto.randomUUID().toString(),
-    description: 'Dummy description',
-    eventLocation: payload.location,
-    eventDate: payload.date,
-    ownerId: crypto.randomUUID().toString(),
-    ownerName: 'Dummy owner',
-    eventImage: payload.image,
-  });
-
-  return json({ message: 'Event created' }, { status: 201 });
+  return json(response.body, { status: response.status });
 }
