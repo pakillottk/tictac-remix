@@ -35,6 +35,7 @@
     "src/contexts/auth"
   ],
   "dependencies": {
-    "inversify": "^6.0.2"
+    "inversify": "^6.0.2",
+    "remix-keycloak": "^2.0.4"
   }
 }
