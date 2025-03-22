@@ -23,10 +23,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
     roles: decodedToken.realm_access.roles,
   };
 
+  if (tokens.token_type.toLowerCase() !== 'bearer') {
+    throw new Error('Invalid token type');
+  }
+
+  const tokenExpirationDate = new Date();
+  tokenExpirationDate.setSeconds(tokenExpirationDate.getSeconds() + (tokens.expires_in || 0));
+
   session.set('user', userInfo);
   session.set('tokens', {
     access_token: tokens.access_token,
     refresh_token: tokens.refresh_token,
+    token_expiresAt: tokenExpirationDate,
   });
   session.unset('code_verifier');
   session.unset('state');
